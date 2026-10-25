@@ -39,3 +39,14 @@ def test_a_broken_image_never_breaks_the_card(monkeypatch):
     monkeypatch.setattr(images, "Canvas", None)  # drawing will crash
     card = cards.intro(game())
     assert card.image is None and card.title
+
+
+def test_berry_sprites():
+    from squadbot import sprites
+    w, h, px = sprites.mascot()
+    assert (w, h) == (24, 24) and px and (0, 0) not in px  # background left out
+    for mood in ("angry", "hurt", "dead"):
+        for kind in ("boss", "lie"):
+            img = sprites.boss_image(mood, kind, 240)
+            assert img.size == (240, 240)
+    assert sprites.image(sprites.hero(), 6).width == sprites.hero()[0] * 6

@@ -12,7 +12,7 @@ import logging
 import re
 from pathlib import Path
 
-from . import config, progress
+from . import config, progress, sprites
 
 log = logging.getLogger("squad.images")
 
@@ -132,48 +132,11 @@ class Canvas:
         self.text(x0 + w / 2, y + h / 2, s, f, ink, "mm")
         return w
 
-    def monster(self, cx, cy, r, color, mood):
-        """A cartoon boss. mood: angry | hurt | dead."""
-        d, P = self.d, self.p
-        body = (92, 96, 116) if mood == "dead" else color
-        horn = (150, 152, 166) if mood == "dead" else (244, 232, 206)
-        for side in (-1, 1):
-            d.polygon([P(cx + side * r * 0.42, cy - r * 0.62), P(cx + side * r * 0.98, cy - r * 1.22),
-                       P(cx + side * r * 0.78, cy - r * 0.45)], fill=horn)
-        d.ellipse([P(cx - r, cy - r * 0.86), P(cx + r, cy + r)], fill=body)
-        d.ellipse([P(cx - r * 0.62, cy + r * 0.28), P(cx + r * 0.62, cy + r * 0.92)], fill=tint(body, 1.18))  # belly
-        d.ellipse([P(cx - r * 0.7, cy - r * 0.78), P(cx - r * 0.25, cy - r * 0.45)], fill=tint(body, 1.3))   # shine
-        for side in (-1, 1):
-            ex, ey, er = cx + side * r * 0.36, cy - r * 0.12, r * 0.21
-            if mood == "dead":
-                k = er * 0.8
-                d.line([P(ex - k, ey - k), P(ex + k, ey + k)], fill=(30, 30, 40), width=int(6 * S))
-                d.line([P(ex - k, ey + k), P(ex + k, ey - k)], fill=(30, 30, 40), width=int(6 * S))
-                continue
-            d.ellipse([P(ex - er, ey - er), P(ex + er, ey + er)], fill=(255, 255, 255))
-            pr = er * 0.5
-            px = ex - side * er * 0.25
-            d.ellipse([P(px - pr, ey - pr + er * 0.15), P(px + pr, ey + pr + er * 0.15)], fill=(24, 18, 30))
-            brow_out, brow_in = (ey - er * 1.25, ey - er * 0.7) if mood == "angry" else (ey - er * 0.9, ey - er * 1.3)
-            d.line([P(ex + side * er * 1.1, brow_out), P(ex - side * er * 0.9, brow_in)], fill=tint(body, 0.45),
-                   width=int(7 * S))
-        my = cy + r * 0.42
-        if mood == "dead":
-            d.line([P(cx - r * 0.3, my), P(cx - r * 0.1, my - r * 0.08), P(cx + r * 0.1, my), P(cx + r * 0.3, my - r * 0.08)],
-                   fill=(30, 30, 40), width=int(5 * S), joint="curve")
-            return
-        mw, mh = r * 0.5, r * (0.22 if mood == "angry" else 0.14)
-        d.rounded_rectangle([P(cx - mw, my - mh), P(cx + mw, my + mh)], int(mh * S), fill=(44, 12, 24))
-        teeth = 5
-        for i in range(teeth):
-            tx = cx - mw * 0.8 + i * (mw * 1.6 / (teeth - 1))
-            d.polygon([P(tx - r * 0.07, my - mh + 1), P(tx + r * 0.07, my - mh + 1), P(tx, my - mh + r * 0.13)],
-                      fill=(250, 248, 240))
-        if mood == "hurt":  # bandage and a sweat drop
-            bx, by = cx + r * 0.55, cy - r * 0.55
-            self.rect(bx - r * 0.24, by - r * 0.07, r * 0.48, r * 0.14, (246, 226, 196), 4)
-            self.rect(bx - r * 0.07, by - r * 0.24, r * 0.14, r * 0.48, (246, 226, 196), 4)
-            d.ellipse([P(cx - r * 0.95, cy - r * 0.35), P(cx - r * 0.8, cy - r * 0.12)], fill=(120, 200, 250))
+    def sprite(self, img, x, y):
+        """Paste a pixel sprite (PIL image at 1x) with its top-left at (x, y), keeping the pixels crisp."""
+        from PIL import Image
+        big = img.resize((img.width * S, img.height * S), Image.NEAREST)
+        self.img.alpha_composite(big, (int(x * S), int(y * S)))
 
     def png(self) -> bytes:
         from PIL import Image
@@ -189,10 +152,12 @@ class Canvas:
 def battle(game, name: str, stamp: str = "", stamp_color=GOLD) -> bytes:
     """The boss with both HP bars. `stamp` is a hit marker for reveals, e.g. "CRIT!" or "-34 HP"."""
     c = Canvas(960, 380)
-    color = color_for(game.topic) if game.mode != "lie" else (222, 88, 138)
+    kind = "lie" if game.mode == "lie" else "boss"
+    color = (232, 92, 150) if kind == "lie" else (146, 86, 214)
     mood = "dead" if game.hp <= 0 else "hurt" if game.hp < 40 else "angry"
-    c.glow(200, 200, 210, color if mood != "dead" else (90, 90, 110))
-    c.monster(200, 215, 118, color, mood)
+    c.glow(200, 190, 210, color if mood != "dead" else (90, 90, 110))
+    art = sprites.boss_image(mood, kind, 264)
+    c.sprite(art, 200 - art.width / 2, 190 - art.height / 2)
     x, w = 410, 510
     tag = "TWO TRUTHS & A LIE" if game.mode == "lie" else "BOSS BATTLE"
     if game.course:
@@ -211,7 +176,7 @@ def battle(game, name: str, stamp: str = "", stamp_color=GOLD) -> bytes:
     if stamp:
         c.pill(940, 30, stamp, font(PIX, 30), stamp_color, anchor="right")
     if mood == "dead":
-        c.pill(200, 326, "DEFEATED", font(PIX, 26), GREEN, anchor="center")
+        c.pill(200, 330, "DEFEATED", font(PIX, 26), GREEN, anchor="center")
     return c.png()
 
 
@@ -239,7 +204,11 @@ def results(game, name: str, board: list[tuple[str, str, int]], weak: list[str])
         c.text(x, top - r - 10, clean(pname, 14), font(BOLD, 24), TEXT, "ms")
         c.text(x, top + 36, str(pts), font(BOLD, 36), TEXT, "ma")
         c.text(x, top + 78, "points", font(PIX, 17), MUTED, "ma")
-    c.rect(40, base, 880, 3, TRACK)
+    hero = sprites.image(sprites.hero(), 6)  # your squad's berry, sword up
+    c.sprite(hero, 24, base - hero.height)
+    boss = sprites.boss_image("dead" if game.outcome == "victory" else "angry", "lie" if game.mode == "lie" else "boss", 150)
+    c.sprite(boss, 960 - 30 - boss.width, base - boss.height)
+    c.rect(24, base, 912, 3, TRACK)
     c.text(480, base + 30, f"Weak spot: {clean(', '.join(weak), 50)}" if weak else "No weak spots this round",
            font(REG, 21), GOLD if weak else MUTED, "mm")
     return c.png()
