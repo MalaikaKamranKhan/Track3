@@ -30,6 +30,7 @@ def num(name: str, default: float) -> float:
 
 
 BOT_NAME = env("BOT_NAME", "Squad")
+IMAGES = env("IMAGES", "on").lower() not in {"0", "off", "false", "no"}  # picture cards (boss, podium, profile)
 PUBLIC_URL = env("PUBLIC_URL", "http://localhost:8000").rstrip("/")
 PORT = int(num("PORT", 8000))
 DATA_DIR = Path(env("DATA_DIR", str(Path(__file__).resolve().parent.parent / "data")))

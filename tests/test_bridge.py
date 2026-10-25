@@ -71,6 +71,9 @@ def test_cubbie_bridge_end_to_end():
 
     posted = run_script(link.key, "challenge", "--topic", "caches", "--questions-file", "questions.json", cwd=work)
     assert posted.returncode == 0 and "Posted a 3-question caches boss battle" in posted.stdout, posted
+    deadline = time.time() + 10  # the battle starts in the background; give it a moment to post
+    while not adapter.sent and time.time() < deadline:
+        time.sleep(0.05)
     assert "Malaika's Cubbie" in adapter.sent[0]["card"].body
 
     busy = run_script(link.key, "challenge", "--topic", "caches", "--material-file", "questions.json", cwd=work)

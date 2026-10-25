@@ -9,7 +9,7 @@ import html
 import re
 from dataclasses import dataclass, field
 
-from . import config, progress
+from . import config, images, progress
 from .engine import LETTERS, defeated, group_weak_topics, leaderboard, perfect_players, wants_wager
 from .store import Game, Squad
 
@@ -25,6 +25,7 @@ class Card:
     color: str = "info"
     fields: list[tuple[str, str, bool]] = field(default_factory=list)  # (name, value, inline)
     footer: str = ""
+    image: bytes | None = None  # optional picture (PNG) shown big inside the card
 
 
 @dataclass
@@ -99,21 +100,25 @@ def _source_line(game: Game) -> str:
 def intro(game: Game) -> Card:
     course = f" · {game.course}" if game.course else ""
     if game.mode == "lie":
-        return Card(f"🕵️ Two Truths & a Lie · {game.topic[:60]}{course}",
+        card = Card(f"🕵️ Two Truths & a Lie · {game.topic[:60]}{course}",
                     _source_line(game) + "Each round has **three statements**. Two are true. Find the **lie**.\n"
                     "Right answers damage The Liar. Wrong ones let it hit back.",
                     "lie", _hp_fields(game),
                     f"{len(game.questions)} rounds · {game.seconds}s each · 🎲 one 50/50 per game")
+        card.image = images.battle(game, boss_name(game))
+        return card
     if game.mode == "daily":
         return Card(f"📅 Daily Duel · {game.topic[:60]}{course}",
                     "One question a day. Answer right to keep your 🔥 streak alive.",
                     "gold", footer=f"Open for {_dur(game.seconds)}")
-    return Card(f"⚔️ {boss_name(game)} has appeared!{course}",
+    card = Card(f"⚔️ {boss_name(game)} has appeared!{course}",
                 _source_line(game) + "Everyone answers. Every right answer damages the boss, "
                 "and every wrong one lets it hit the squad back.\n🔥 3 in a row = critical hit.",
                 "boss", _hp_fields(game),
                 f"{len(game.questions)} questions · {game.seconds}s each · 🎲 one 50/50 per battle"
                 + (" · 💰 final wager" if wants_wager(game) else ""))
+    card.image = images.battle(game, boss_name(game))
+    return card
 
 
 def _dur(seconds: int) -> str:
@@ -168,7 +173,16 @@ def reveal(game: Game, s: dict) -> Card:
             lines.append(f"👹 The boss hits back: **-{s['boss_hit']} squad HP**")
     for name, delta, frac in s.get("wagers", []):
         lines.append(f"💰 {esc(name)} wagered {'ALL IN' if frac >= 1 else 'half'}: **{'+' if delta > 0 else ''}{delta}**")
-    return Card(title, "\n".join(lines), color, _hp_fields(game) if game.mode != "daily" else [])
+    card = Card(title, "\n".join(lines), color, _hp_fields(game) if game.mode != "daily" else [])
+    if game.mode != "daily":
+        if s["crits"]:
+            stamp, tone = "CRIT!", images.GOLD
+        elif s["correct"]:
+            stamp, tone = f"-{round(s['damage'])} HP", images.GOLD
+        else:
+            stamp, tone = "MISS", images.RED
+        card.image = images.battle(game, boss_name(game), stamp, tone)
+    return card
 
 
 def results(squad: Squad, game: Game, awards: dict[str, dict]) -> Card:
@@ -199,7 +213,9 @@ def results(squad: Squad, game: Game, awards: dict[str, dict]) -> Card:
     fields.append(("🎯 Squad weak spot", esc(", ".join(weak)) if weak else "None this round 📈", True))
     if board:
         fields.append(("⭐ MVP", esc(board[0][1]), True))
-    return Card(title, "", color, fields, "Linked players: your Cubbie has your private recap · /profile for your stats")
+    card = Card(title, "", color, fields, "Linked players: your Cubbie has your private recap · /profile for your stats")
+    card.image = images.results(game, name, board, weak)
+    return card
 
 
 def wager_prompt(game: Game) -> Card:
@@ -287,7 +303,9 @@ def profile_card(squad: Squad, uid: str) -> Card:
               ("⭐ XP", str(p["xp"]), True), ("🏅 Badges", badges, False)]
     if p["weak"]:
         fields.append(("📉 Work on", esc(", ".join(p["weak"])), False))
-    return Card(f"👤 {p['name']}", "", "calm", fields, f"{squad.name}")
+    card = Card(f"👤 {p['name']}", "", "calm", fields, f"{squad.name}")
+    card.image = images.profile(p)
+    return card
 
 
 def help_card() -> Card:

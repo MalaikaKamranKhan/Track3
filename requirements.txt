@@ -4,5 +4,6 @@ fastapi==0.115.4
 uvicorn==0.32.0
 httpx==0.27.2
 pypdf==5.1.0
+pillow>=11.3
 # only for LLM_PROVIDER=bedrock:
 # boto3==1.35.54

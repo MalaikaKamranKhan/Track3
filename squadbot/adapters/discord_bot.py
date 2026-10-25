@@ -6,6 +6,7 @@ Invite with scopes bot + applications.commands and permissions Send Messages, Re
 """
 from __future__ import annotations
 
+import io
 import logging
 
 import discord
@@ -37,7 +38,13 @@ def embed(card: Card) -> discord.Embed:
         e.add_field(name=name[:256], value=(value or "​")[:1024], inline=inline)
     if card.footer:
         e.set_footer(text=card.footer[:2048])
+    if card.image:
+        e.set_image(url="attachment://card.png")
     return e
+
+
+def image_file(card: Card) -> discord.File | None:
+    return discord.File(io.BytesIO(card.image), filename="card.png") if card.image else None
 
 
 async def _on_press(interaction: discord.Interaction, tok: str) -> None:
@@ -91,6 +98,9 @@ class DiscordAdapter:
         v = view(buttons)
         if v:
             kwargs["view"] = v
+        f = image_file(card)
+        if f:
+            kwargs["file"] = f
         if reply_to is not None:
             kwargs["reference"] = reply_to
             kwargs["mention_author"] = False
@@ -100,6 +110,8 @@ class DiscordAdapter:
         kwargs = {}
         if card is not None:
             kwargs["embed"] = embed(card)
+            f = image_file(card)
+            kwargs["attachments"] = [f] if f else []
         if buttons is not None:
             kwargs["view"] = view(buttons)
         if kwargs:
@@ -107,10 +119,12 @@ class DiscordAdapter:
 
     # events -------------------------------------------------------------------
     async def on_ready(self):
-        if config.DISCORD_GUILD_ID:
-            guild = discord.Object(id=int(config.DISCORD_GUILD_ID))
-            self.tree.copy_global_to(guild=guild)
-            await self.tree.sync(guild=guild)
+        guild_ids = [g.strip() for g in config.DISCORD_GUILD_ID.split(",") if g.strip()]
+        if guild_ids:
+            for gid in guild_ids:  # DISCORD_GUILD_ID can list several servers: 111,222
+                guild = discord.Object(id=int(gid))
+                self.tree.copy_global_to(guild=guild)
+                await self.tree.sync(guild=guild)
         else:
             await self.tree.sync()  # global commands can take a while to appear the first time
         log.info("Discord bot online as %s", self.client.user)
@@ -148,6 +162,9 @@ class DiscordAdapter:
         v = view(reply.buttons)
         if v:
             kwargs["view"] = v
+        f = image_file(reply.card)
+        if f:
+            kwargs["file"] = f
         await interaction.followup.send(**kwargs)
 
     def _register_commands(self):
