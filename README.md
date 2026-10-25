@@ -18,7 +18,7 @@ A pixel berry knight that turns a study group's Discord into a quiz game, and ta
 
 <sub>Team wildberry · Cubbie Hackathon, Track 3 (Group Chat Assistant) · DevHacks Fall 2026</sub>
 
-**[Quick start](#quick-start)** · **[Full setup guide](SETUP.md)** · **[How Cubbie fits in](#how-cubbie-is-in-the-loop)**
+**[How Cubbie fits in](#how-cubbie-is-in-the-loop)** · **[Cubbie on your phone](#cubbie-from-your-phone)** · **[Quick start](#quick-start)** · **[Full setup guide](SETUP.md)** · **[Demo](#demo-in-3-minutes)**
 
 </div>
 
@@ -43,13 +43,30 @@ what *they* missed.
 | | |
 |---|---|
 | **Cubbie reads Canvas** | Each student links their Cubbie with `/link`. On every check-in it shares a small course snapshot: course codes, this week's topics, due dates and what's submitted. Never grades or files. |
-| **Cubbie builds battles** | *"Challenge my squad on caches"* → Cubbie writes questions from that student's own course material, **asks them first**, then Cramberry posts the battle. |
+| **Cubbie builds battles** | Questions come from that student's own course material, and Cubbie **asks them first** before Cramberry posts anything. |
 | **Cramberry spots the moment** | From everyone's snapshots it notices *"3 of you have the midterm Thursday"* or *"the squad keeps missing associativity"* and offers a battle. |
 | **Recaps stay private** | The group sees questions, answers and scores. Your misses and @mentions go only to your own Cubbie, through your private key. |
 
 Cubbie can't receive messages, so it always comes to Cramberry, like checking a mailbox. Cramberry keeps only the
 last ~20 chat messages in memory (never stored), and `/quiet` turns chat reading off. No Cubbie? Everything except
 the Cubbie features still works.
+
+---
+
+## Cubbie, from your phone
+
+<div align="center"><img src="docs/img/cubbie-chat.png" width="860" alt="Two iMessage chats with Cubbie. Left: link my study squad, the private page for the key, linked to wildberry squad #general, then sharing a course snapshot. Right: challenge my squad on caches, Cubbie asks before posting, then a private recap"></div>
+
+| Text Cubbie | What happens |
+|---|---|
+| *install https://github.com/MalaikaKamranKhan/Track3/blob/main/cubbie-skill/squad-link/SKILL.md* | Cubbie installs the squad-link skill |
+| *link my study squad* | Cubbie sends a **private page**: paste the key from `/link` there, never in the chat. It confirms "Linked as … to wildberry squad's #general on Discord" and asks to share your course progress |
+| *check my squad and share my course snapshot* | Your courses and deadlines reach Cramberry (`/radar`, `/insights`) and anything new from the squad comes back |
+| *challenge my squad on caches* | Cubbie writes the questions, asks *"Post this battle to your squad?"*, and posts only after you say yes |
+| *how did the squad battle go?* | Your private recap: rank, what you missed and why |
+| *update squad-link* | Re-installs the skill from GitHub, e.g. after the bot's server address changes |
+
+Details in [SETUP.md → Connect Cubbie](SETUP.md#7-connect-cubbie).
 
 ---
 
@@ -119,13 +136,15 @@ another university's course with the same code.
 
 ## Quick start
 
+Needs Python 3.10+ and a Discord bot token ([how to get one](SETUP.md#3-create-the-discord-bot)).
+
 ```powershell
 git clone https://github.com/MalaikaKamranKhan/Track3.git
 cd Track3
 python -m venv .venv
 .venv\Scripts\python -m pip install -r requirements.txt
 copy .env.example .env                     # add your DISCORD_TOKEN and DISCORD_GUILD_ID
-.venv\Scripts\python -m squadbot.main
+.venv\Scripts\python -m cramberry.main
 ```
 
 Then type `/battle caches` in your server. It runs without any AI key (`LLM_PROVIDER=fake` uses a built-in question
@@ -134,24 +153,12 @@ troubleshooting are in the **[full setup guide](SETUP.md)**.
 
 ---
 
-## Cubbie, from your phone
-
-<div align="center"><img src="docs/img/cubbie-chat.png" width="520" alt="An iMessage chat with Cubbie: it builds a caches battle from CSE 230 notes, asks before posting, then sends a private recap"></div>
-
-1. Text Cubbie the skill folder link (`…/tree/main/cubbie-skill/squad-link`) and reply yes.
-2. Type `/link` in your Discord channel, then text Cubbie *"link my study squad"* and paste the key on its secure page.
-3. *"Challenge my squad on caches"* → say yes → the battle lands in Discord. Afterwards: *"how did the squad battle go?"*
-
-Details in [SETUP.md → Connect Cubbie](SETUP.md#7-connect-cubbie).
-
----
-
 ## Demo in 3 minutes
 
 1. Sunny types *"midterm thursday, im so cooked on caches"* and Cramberry rallies the squad.
 2. Malaika texts her **Cubbie** *"challenge my squad on caches from my CSE 230 notes"*, approves it, and *"📲 Malaika's Cubbie built this"* lands in Discord.
 3. Judges press A–D on their own phones and watch the grape boss's HP drop and the podium form.
-4. Malaika texts Cubbie *"how did we do?"* and gets a private recap with her missed question explained.
+4. Malaika texts Cubbie *"how did the squad battle go?"* and gets a private recap with her missed question explained.
 5. Show `/quiet` and the "asks before posting" step: privacy and consent built in.
 
 ---
@@ -160,20 +167,20 @@ Details in [SETUP.md → Connect Cubbie](SETUP.md#7-connect-cubbie).
 
 <div align="center"><img src="docs/img/berry.png" width="720" alt="The original blue berry, Cramberry holding a sword, and its purple evil twin"></div>
 
-Every character is one 24 × 24 pixel berry ([`squadbot/assets/mascot.svg`](squadbot/assets/mascot.svg)): give it a
+Every character is one 24 × 24 pixel berry ([`cramberry/assets/mascot.svg`](cramberry/assets/mascot.svg)): give it a
 sword and it's Cramberry, recolour it with horns and fangs and it's a topic boss. All of it is drawn from data at
 runtime, so the cards stay sharp at any size.
 
 ```text
-squadbot/main.py                 one process: Discord bot + scheduler + FastAPI for Cubbie
-squadbot/runner.py               every game and feature, buttons, commands, the scheduler
-squadbot/engine.py               battle rules: damage, crits, 50/50, wagers, weak topics, "im cooked"
-squadbot/cards.py · images.py    every message as an embed, plus the Pillow picture cards
-squadbot/sprites.py              Cramberry and the fruit bosses, built from assets/mascot.svg
-squadbot/llm.py                  questions, lies, grading (Gemini, Claude, OpenAI, Bedrock, offline)
-squadbot/insights.py             Cubbie snapshots, right-moment suggestions, /radar
-squadbot/api.py                  the HTTPS API the Cubbie skill calls
-squadbot/adapters/discord_bot.py slash commands, buttons, embeds
+cramberry/main.py                 one process: Discord bot + scheduler + FastAPI for Cubbie
+cramberry/runner.py               every game and feature, buttons, commands, the scheduler
+cramberry/engine.py               battle rules: damage, crits, 50/50, wagers, weak topics, "im cooked"
+cramberry/cards.py · images.py    every message as an embed, plus the Pillow picture cards
+cramberry/sprites.py              Cramberry and the fruit bosses, built from assets/mascot.svg
+cramberry/llm.py                  questions, lies, grading (Gemini, Claude, OpenAI, Bedrock, offline)
+cramberry/insights.py             Cubbie snapshots, right-moment suggestions, /radar
+cramberry/api.py                  the HTTPS API the Cubbie skill calls
+cramberry/adapters/discord_bot.py slash commands, buttons, embeds
 cubbie-skill/squad-link/         the Cubbie Skill: SKILL.md + a standard-library script
 tests/                           27 offline tests, from battle rules to the full Cubbie loop over HTTP
 ```
@@ -190,7 +197,7 @@ Code: [MIT](LICENSE) © 2026 team wildberry. Use it, change it, share it; just k
 
 - **Cubbie** and its mascot belong to [Cubbie](https://hackathon.cubbie.ai/); they appear here to show how the
   hackathon pieces connect.
-- Fonts: [Outfit](squadbot/assets/fonts/Outfit-OFL.txt) and [Pixelify Sans](squadbot/assets/fonts/PixelifySans-OFL.txt),
+- Fonts: [Outfit](cramberry/assets/fonts/Outfit-OFL.txt) and [Pixelify Sans](cramberry/assets/fonts/PixelifySans-OFL.txt),
   both under the SIL Open Font License.
 
 <div align="center">

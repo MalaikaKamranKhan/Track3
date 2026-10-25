@@ -1,7 +1,7 @@
 """Picture cards: they draw, they're attached to the right cards, and Discord shows them inside the embed."""
-from squadbot import cards, images
-from squadbot.adapters.discord_bot import embed, image_file
-from squadbot.store import Game, Question
+from cramberry import cards, images
+from cramberry.adapters.discord_bot import embed, image_file
+from cramberry.store import Game, Question
 
 PNG = b"\x89PNG"
 
@@ -42,7 +42,7 @@ def test_a_broken_image_never_breaks_the_card(monkeypatch):
 
 
 def test_berry_sprites():
-    from squadbot import sprites
+    from cramberry import sprites
     w, h, px = sprites.mascot()
     assert (w, h) == (24, 24) and px and (0, 0) not in px  # background left out
     for mood in ("angry", "hurt", "dead"):

@@ -2,8 +2,8 @@
 import time
 from datetime import date, datetime, timedelta
 
-from squadbot import cards, engine, planner, progress
-from squadbot.store import store
+from cramberry import cards, engine, planner, progress
+from cramberry.store import store
 
 
 def make_game(squad, n=4, options=4, mode="boss"):

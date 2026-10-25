@@ -1,4 +1,4 @@
-"""Runs the API server and the Discord bot (when DISCORD_TOKEN is set), all in one process: python -m squadbot.main"""
+"""Runs the API server and the Discord bot (when DISCORD_TOKEN is set), all in one process: python -m cramberry.main"""
 from __future__ import annotations
 
 import asyncio

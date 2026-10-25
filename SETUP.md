@@ -99,7 +99,7 @@ If a provider says the model doesn't exist, set `LLM_MODEL` to one your account 
 ## 5. Start the bot
 
 ```powershell
-.venv\Scripts\python -m squadbot.main        # macOS/Linux: .venv/bin/python -m squadbot.main
+.venv\Scripts\python -m cramberry.main        # macOS/Linux: .venv/bin/python -m cramberry.main
 ```
 
 Wait for `Discord bot online as Cramberry#…` in the log, then type `/help` in your server. Try `/battle caches`.
@@ -164,24 +164,41 @@ Then:
    [`cubbie-skill/squad-link/scripts/squad.py`](cubbie-skill/squad-link/scripts/squad.py), commit and push.
    Cubbie installs the skill from GitHub, so it only sees what's pushed.
 3. Check it: open `https://<your-address>/health`. You should see `{"ok":true,"bots":["discord"]}`.
+4. If Cubbie already has the skill, text it **update squad-link** so it picks up the new address.
 
 ---
 
 ## 7. Connect Cubbie
 
-<div align="center"><img src="docs/img/cubbie-chat.png" width="520" alt="An iMessage chat with Cubbie: it builds a caches battle from CSE 230 notes, asks before posting, then sends a private recap"></div>
+<div align="center"><img src="docs/img/cubbie-chat.png" width="860" alt="Two iMessage chats with Cubbie. Left: link my study squad, the private page for the key, linked to wildberry squad #general, then sharing a course snapshot. Right: challenge my squad on caches, Cubbie asks before posting, then a private recap"></div>
 
-1. **Install the skill.** Text Cubbie the link to the skill folder in your repo, for example
-   `https://github.com/<you>/<repo>/tree/main/cubbie-skill/squad-link`, and reply **yes**.
+1. **Install the skill.** Say hi to Cubbie, then text **install** followed by the link to the skill's `SKILL.md`:
+   ```text
+   install https://github.com/MalaikaKamranKhan/Track3/blob/main/cubbie-skill/squad-link/SKILL.md
+   ```
+   Running your own copy? Use your repo's link instead: `https://github.com/<you>/<repo>/blob/main/cubbie-skill/squad-link/SKILL.md`.
 2. **Get your key.** In your Discord channel, type `/link`. The key is shown only to you.
-3. **Link.** Text Cubbie *"link my study squad"* and paste the key on Cubbie's **secure page**, never in the chat.
-4. **Try it.**
-   - *"check my squad"*: Cubbie shares your course snapshot. `/radar` and `/insights` now show your courses.
-   - *"challenge my squad on caches"*: Cubbie writes questions from your Canvas material, asks you, then the battle
-     appears in Discord.
-   - After playing: *"how did the squad battle go?"* gets your private recap.
+3. **Link.** Text Cubbie **link my study squad**. Cubbie replies *"Checking it now."* and sends a
+   **Provide details · Cubbie** link to a private page. Open it and paste your key there, never in the chat.
+   Cubbie confirms: *"Linked as <your name> to <server> #<channel> on Discord"*.
+4. **Share your courses.** Cubbie asks once whether to share your course progress (course codes, topic names,
+   assignment titles, due dates and submission status; never grades or files). Reply **yes**, or text
+   **check my squad and share my course snapshot** any time. `/radar` and `/insights` then show your courses.
+5. **Play.**
+   - **check my squad**: anything new from the squad (battle requests, results, mentions, locked sessions).
+     If there's nothing, Cubbie says *"Nothing new from your squad right now."*
+   - **challenge my squad on caches**: Cubbie writes questions from your course material, shows the first one,
+     asks *"Post this battle to your squad?"*, and posts only after you say yes.
+   - After playing, **how did the squad battle go?** gets your private recap: rank, what you missed and why.
 
-> **Renamed yourself in Discord?** Run `/link` again. Your key stays the same and Cubbie picks up the new name.
+| What you text | When |
+|---|---|
+| **update squad-link** | After the bot's server address changes (step 6), so Cubbie re-installs the skill from GitHub |
+| **link my study squad** | First time, or when Cubbie says it *"rejected the saved key"* (run `/link` again first) |
+| **check my squad and share my course snapshot** | To send fresh deadlines and topics to the squad |
+
+> **Renamed yourself in Discord?** Run `/link` again and send **link my study squad**. Your key stays the same and
+> Cubbie picks up the new name.
 
 ---
 
@@ -211,8 +228,8 @@ real HTTP.
 | `Improper token has been passed` | Reset the token and paste it again, with no quotes or spaces |
 | `[Errno 10048]` / "address already in use" | Something else uses port 8000: stop it, or set `PORT=8001` (and point your tunnel at 8001) |
 | Gemini returns 404 | The model name isn't available to your key: set `LLM_MODEL` |
-| Cubbie says "server unreachable" | The tunnel or the bot isn't running, or `SERVER` in `squad.py` doesn't match your address (and isn't pushed) |
-| Cubbie says "key rejected" | The key came from a different bot or `data/state.json` was reset: run `/link` and save the new key |
+| Cubbie can't reach the bot (an address or "unreachable" error) | Check the tunnel and the bot are running, `SERVER` in `squad.py` matches your address and is pushed, then text Cubbie **update squad-link** |
+| Cubbie says the bot *"rejected the saved key"* | The key is from another bot or `data/state.json` was reset: type `/link` in Discord, text **link my study squad**, and enter the new key on the private page |
 | Names look outdated | Names update the next time that person uses a command, sends a message or presses a button |
 
 Still stuck? Open an issue with the last lines of the bot's log (remove any tokens first).

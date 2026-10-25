@@ -5,7 +5,7 @@
   mood: angry | hurt | dead · kind: a fruit (grape, lime, lemon, tangerine, kiwi; fruit_for(topic) picks one)
   or lie (the dragonfruit liar)
 
-Drop your own art in squadbot/assets/boss.png (or boss.svg in the same pixel-rect format as the mascot) and it's used
+Drop your own art in cramberry/assets/boss.png (or boss.svg in the same pixel-rect format as the mascot) and it's used
 as the boss instead.
 """
 from __future__ import annotations

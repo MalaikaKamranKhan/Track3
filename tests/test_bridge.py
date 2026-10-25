@@ -12,9 +12,9 @@ from pathlib import Path
 import uvicorn  # noqa: E402
 from conftest import FakeAdapter  # noqa: E402
 
-from squadbot import runner  # noqa: E402
-from squadbot.api import app  # noqa: E402
-from squadbot.store import store  # noqa: E402
+from cramberry import runner  # noqa: E402
+from cramberry.api import app  # noqa: E402
+from cramberry.store import store  # noqa: E402
 
 SCRIPT = Path(__file__).resolve().parent.parent / "cubbie-skill" / "squad-link" / "scripts" / "squad.py"
 PORT = 8765
@@ -92,7 +92,7 @@ def test_cubbie_bridge_end_to_end():
     assert "NOTHING NEW" in run_script(link.key, "results").stdout  # marked read
 
     # a locked study session reaches the Cubbie as a SESSION line
-    from squadbot import planner
+    from cramberry import planner
     plan, _ = planner.create(store, squad, "caches", "CSE 230", "u2", "Dhanush", "tomorrow 7pm")
     planner.toggle_vote(store, squad, plan, 0, "u1", "Malaika")
     planner.toggle_vote(store, squad, plan, 0, "u2", "Dhanush")

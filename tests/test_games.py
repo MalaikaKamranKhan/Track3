@@ -5,8 +5,8 @@ from datetime import date, datetime, timedelta
 
 from conftest import FakeAdapter
 
-from squadbot import config, insights, runner
-from squadbot.store import store
+from cramberry import config, insights, runner
+from cramberry.store import store
 
 
 def press(adapter_sent_buttons, label, uid, name):

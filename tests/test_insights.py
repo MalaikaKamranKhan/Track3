@@ -13,9 +13,9 @@ from pathlib import Path
 import uvicorn  # noqa: E402
 from conftest import FakeAdapter  # noqa: E402
 
-from squadbot import insights, notes, runner  # noqa: E402
-from squadbot.api import app  # noqa: E402
-from squadbot.store import store  # noqa: E402
+from cramberry import insights, notes, runner  # noqa: E402
+from cramberry.api import app  # noqa: E402
+from cramberry.store import store  # noqa: E402
 
 SCRIPT = Path(__file__).resolve().parent.parent / "cubbie-skill" / "squad-link" / "scripts" / "squad.py"
 PORT = 8766
@@ -68,7 +68,7 @@ def test_suggestions_from_snapshots_and_weak_spots():
     assert any(k.startswith("done:CSE 230") for k in keys)
     squad.weak = {"a": {"associativity": 2}, "b": {"associativity": 1}}
     assert any(s["key"].startswith("weak:associativity") for s in insights.suggestions(squad))
-    from squadbot.cards import plain
+    from cramberry.cards import plain
     text = plain(insights.overview(squad))
     assert "CSE 230" in text and "weak spots" in text
 
