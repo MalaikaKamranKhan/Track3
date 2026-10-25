@@ -5,9 +5,10 @@
   <img src="docs/img/wordmark-light.png" width="520" alt="Cramberry: the blue pixel berry next to the word Cramberry in pixel letters">
 </picture>
 
-### Your study squad's boss battle, right in Discord.
+### Turn your Discord study group chat into a cram battle.
 
-A pixel berry knight that turns a study group's Discord into a quiz game, and talks to each student's own Cubbie.
+**Cramberry** (cram + cranberry) is a Discord bot for study groups. When someone says "im cooked", it starts a
+2-minute quiz the whole group plays together, and each person's Cubbie texts them what they got wrong.
 
 ![Cubbie Hackathon](https://img.shields.io/badge/cubbie%20hackathon-track%203-1f6fe0?style=for-the-badge)
 ![Discord](https://img.shields.io/badge/lives%20in-discord-5865f2?style=for-the-badge)
@@ -18,7 +19,7 @@ A pixel berry knight that turns a study group's Discord into a quiz game, and ta
 
 <sub>Team wildberry · Cubbie Hackathon, Track 3 (Group Chat Assistant) · DevHacks Fall 2026</sub>
 
-**[How Cubbie fits in](#how-cubbie-is-in-the-loop)** · **[Cubbie on your phone](#cubbie-from-your-phone)** · **[Quick start](#quick-start)** · **[Full setup guide](SETUP.md)** · **[Demo](#demo-in-3-minutes)**
+**[How it works](#how-it-works)** · **[Cubbie](#cubbie-from-your-phone)** · **[Games](#the-games)** · **[Quick start](#quick-start)** · **[Setup guide](SETUP.md)**
 
 </div>
 
@@ -26,30 +27,29 @@ A pixel berry knight that turns a study group's Discord into a quiz game, and ta
 
 ## Why it exists
 
-Studying alone is boring, group study turns into chatting, and nobody knows what the group *actually* doesn't
-understand.
+Studying alone is boring, group study turns into chatting, and nobody knows what the group doesn't understand.
 
-Cramberry makes the group chat itself the study session. Someone says *"im so cooked on caches"*, and two minutes
-later the whole squad is fighting the Caches Boss together. Every right answer drains its HP; every wrong one lets it
-hit back. When the fight ends, the squad sees its weakest topic, and each student's **Cubbie** quietly texts them
-what *they* missed.
+Cramberry turns the group chat into the cram session. Someone says *"im so cooked on caches"*, and two minutes later
+the whole group is fighting the Caches Boss: right answers drain its HP, wrong ones let it hit back. When the fight
+ends, everyone sees the topic to review, and each person's **Cubbie** texts them what *they* missed.
 
 ---
 
-## How Cubbie is in the loop
+## How it works
 
 <div align="center"><img src="docs/img/flow.png" width="860" alt="How the squad is linked: each student's Cubbie reads their Canvas in private, sends a snapshot or a battle to the Cramberry server over the squad-link skill, Cramberry posts the game in the Discord group chat, the squad answers, and each private recap goes back only to that student's Cubbie"></div>
 
 | | |
 |---|---|
-| **Cubbie reads Canvas** | Each student links their Cubbie with `/link`. On every check-in it shares a small course snapshot: course codes, this week's topics, due dates and what's submitted. Never grades or files. |
-| **Cubbie builds battles** | Questions come from that student's own course material, and Cubbie **asks them first** before Cramberry posts anything. |
-| **Cramberry spots the moment** | From everyone's snapshots it notices *"3 of you have the midterm Thursday"* or *"the squad keeps missing associativity"* and offers a battle. |
-| **Recaps stay private** | The group sees questions, answers and scores. Your misses and @mentions go only to your own Cubbie, through your private key. |
+| **1. Your Cubbie checks Canvas** | Topics and due dates for your classes. Never grades or files. |
+| **2. It writes a quiz from your notes** | And asks you before sending it to the group. |
+| **3. Cramberry posts it in Discord** | Picture cards and A–D buttons in your group chat. |
+| **4. Everyone answers** | Right answers hurt the boss; wrong ones hurt your team. |
+| **5. Your results stay private** | Your rank and what you missed go only to your own Cubbie. |
 
-Cubbie can't receive messages, so it always comes to Cramberry, like checking a mailbox. Cramberry keeps only the
-last ~20 chat messages in memory (never stored), and `/quiet` turns chat reading off. No Cubbie? Everything except
-the Cubbie features still works.
+Cramberry also spots the right moment from everyone's snapshots (*"3 of you have the midterm Thursday"*) and
+offers a battle. It keeps only the last ~20 chat messages in memory, never stored, and `/quiet` turns chat reading
+off. No Cubbie? Everything except the Cubbie features still works.
 
 ---
 
@@ -61,7 +61,7 @@ the Cubbie features still works.
 |---|---|
 | *install https://github.com/MalaikaKamranKhan/Track3/blob/main/cubbie-skill/squad-link/SKILL.md* | Cubbie installs the squad-link skill |
 | *link my study squad* | Cubbie sends a **private page**: paste the key from `/link` there, never in the chat. It confirms "Linked as … to wildberry squad's #general on Discord" and asks to share your course progress |
-| *check my squad and share my course snapshot* | Your courses and deadlines reach Cramberry (`/radar`, `/insights`) and anything new from the squad comes back |
+| *check my squad and share my course snapshot* | Your courses and deadlines reach Cramberry (`/radar`, `/insights`), and anything new from your group comes back |
 | *challenge my squad on caches* | Cubbie writes the questions, asks *"Post this battle to your squad?"*, and posts only after you say yes |
 | *how did the squad battle go?* | Your private recap: rank, what you missed and why |
 | *update squad-link* | Re-installs the skill from GitHub, e.g. after the bot's server address changes |
@@ -74,10 +74,10 @@ Details in [SETUP.md → Connect Cubbie](SETUP.md#7-connect-cubbie).
 
 | Game | How it plays |
 |---|---|
-| **Boss Battle** `/battle <topic>` | Everyone answers A–D. Right answers damage the boss; wrong ones let it hit the squad back. 3 in a row is a ⚡ critical hit, there's one 🎲 50/50 per battle, and the final strike lets you 💰 wager half or all in. |
-| **Two Truths & a Lie** `/lie <topic>` | Three statements, one is a plausible misconception. Find the lie before the dragonfruit liar wins. |
-| **Explain It** `/explain <topic>` | Cramberry calls on someone to explain a concept in their own words. The AI grades it 0–10 and says what to add. Pass, and it's open floor for half XP. |
-| **Daily Duel** `/daily` | One question a day to keep your streak and the squad streak alive. `/daily 8pm` schedules it, `/daily off` stops it. |
+| **Boss Battle** `/battle <topic>` | Everyone answers A–D. Right answers hurt the boss; wrong ones hurt your team. 3 in a row is a ⚡ critical hit, there's one 🎲 50/50 per battle, and on the last question you can 💰 wager half or all in. |
+| **Two Truths & a Lie** `/lie <topic>` | Three statements, one false. Find the lie before the dragonfruit liar wins. |
+| **Explain It** `/explain <topic>` | Cramberry picks someone to explain a concept in their own words. The AI scores it 0–10 and says what to add. Pass, and anyone can answer for half XP. |
+| **Daily Duel** `/daily` | One question a day. Keep your streak and the group's streak alive. `/daily 8pm` schedules it, `/daily off` stops it. |
 
 <div align="center"><img src="docs/img/bosses.png" width="860" alt="Fruit topic bosses: grape, lime, lemon, tangerine, kiwi, the dragonfruit liar, and a defeated boss"></div>
 
@@ -86,9 +86,9 @@ lime, TCP is lemon. Below 40% HP a boss gets a bandage; at zero it turns grey.
 
 ---
 
-## What the squad sees
+## What your group sees
 
-Every battle posts a picture card after each question, drawn live by the bot.
+After every question, Cramberry posts a picture card, drawn live by the bot.
 
 | | |
 |---|---|
@@ -97,14 +97,14 @@ Every battle posts a picture card after each question, drawn live by the bot.
 | <img src="docs/img/card-liar.png" alt="Two Truths and a Lie card with the pink dragonfruit liar"> | <img src="docs/img/card-defeated.png" alt="Battle card: the kiwi Sorting Boss, grey and defeated"> |
 | **Two Truths & a Lie.** The dragonfruit liar. | **Defeated.** The boss goes grey. |
 | <img src="docs/img/card-victory.png" alt="Results card: VICTORY with a podium of Malaika, Sunny and Dhanush, Cramberry holding a sword and the beaten boss"> | <img src="docs/img/card-wiped.png" alt="Results card: SQUAD WIPED, the grape boss still angry"> |
-| **Victory.** The podium and the squad's weak spot. | **Squad wiped.** Run it back. |
+| **Victory.** The podium and the topic to review. | **Lost.** It shows what to study next. |
 
 ---
 
 ## "im cooked"
 
-Say you're cooked in the group chat (*"im cooked"*, *"gonna fail"*, *"send help"*) and Cramberry rallies the whole
-squad instead of letting you spiral.
+Say you're cooked in the group chat (*"im cooked"*, *"gonna fail"*, *"send help"*) and Cramberry gets the whole
+group studying with you.
 
 <div align="center"><img src="docs/img/sos.png" width="860" alt="Discord: Sunny says they're cooked on caches, and Cramberry replies with a five-step game plan: battle, explain, plan, focus, radar"></div>
 
@@ -119,7 +119,7 @@ exam"* doesn't count.
 |---|---|
 | `/plan <topic>` | A poll for a study time. The starter locks it, everyone going gets pinged 30 min before, and linked Cubbies offer to add it to Google Calendar. |
 | `/focus [minutes]` | Group Pomodoro. Join, focus, get pinged at the break. |
-| `/radar` | Everything due in the next 7 days across the squad (from linked Cubbies). Also posts every morning at 9. |
+| `/radar` | Everything due in the next 7 days across the group (from linked Cubbies). Also posts every morning at 9. |
 | `/notes` | Upload slides or notes (PDF, txt, md), and battles on those topics use them. |
 | `/insights` | What Cramberry knows: courses, this week's topics, deadlines, weak spots. |
 | `/profile` · `/leaderboard` | Level, XP, badges, streaks, accuracy. |
@@ -155,7 +155,7 @@ troubleshooting are in the **[full setup guide](SETUP.md)**.
 
 ## Demo in 3 minutes
 
-1. Sunny types *"midterm thursday, im so cooked on caches"* and Cramberry rallies the squad.
+1. Sunny types *"midterm thursday, im so cooked on caches"* and Cramberry gets the group studying.
 2. Malaika texts her **Cubbie** *"challenge my squad on caches from my CSE 230 notes"*, approves it, and *"📲 Malaika's Cubbie built this"* lands in Discord.
 3. Judges press A–D on their own phones and watch the grape boss's HP drop and the podium form.
 4. Malaika texts Cubbie *"how did the squad battle go?"* and gets a private recap with her missed question explained.
@@ -189,7 +189,7 @@ tests/                           27 offline tests, from battle rules to the full
 
 ## Team
 
-Built in one weekend by **team wildberry**: **Malaika**, **Sunny** and **Dhanush**.
+**Team wildberry**: **Malaika**, **Sunny** and **Dhanush**, three students who crammed Cramberry into one weekend.
 
 ## License and credits
 
