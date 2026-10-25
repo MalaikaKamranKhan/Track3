@@ -46,7 +46,9 @@ def test_berry_sprites():
     w, h, px = sprites.mascot()
     assert (w, h) == (24, 24) and px and (0, 0) not in px  # background left out
     for mood in ("angry", "hurt", "dead"):
-        for kind in ("boss", "lie"):
+        for kind in sprites.FRUITS + ("boss", "lie"):
             img = sprites.boss_image(mood, kind, 240)
             assert img.size == (240, 240)
     assert sprites.image(sprites.hero(), 6).width == sprites.hero()[0] * 6
+    assert sprites.fruit_for("Caches") == sprites.fruit_for("caches") in sprites.FRUITS
+    assert len({sprites.fruit_for(t) for t in ("caches", "tcp", "recursion", "krebs cycle", "mips", "sets")}) > 2

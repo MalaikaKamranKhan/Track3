@@ -1,8 +1,9 @@
 """Pixel-art characters built from the team mascot (assets/mascot.svg, a 24x24 pixel berry).
 
 - hero(): the cute berry holding a sword (results screen)
-- boss(mood, kind): its evil twin, a purple berry with red eyes and fangs (battle cards).
-  mood: angry | hurt | dead · kind: boss | lie (the liar is crimson)
+- evil(mood, kind): its evil twin, a fruit-coloured berry with red eyes and fangs (battle cards).
+  mood: angry | hurt | dead · kind: a fruit (grape, lime, lemon, tangerine, kiwi; fruit_for(topic) picks one)
+  or lie (the dragonfruit liar)
 
 Drop your own art in squadbot/assets/boss.png (or boss.svg in the same pixel-rect format as the mascot) and it's used
 as the boss instead.
@@ -79,10 +80,20 @@ def hero() -> tuple[int, int, Px]:
 
 
 PALETTES = {  # outline, light, main, shadow, shine, leaf, leaf highlight
-    "boss": ((26, 14, 38), (146, 86, 214), (98, 44, 164), (60, 22, 112), (206, 172, 248), (34, 88, 52), (86, 156, 92)),
+    "grape": ((26, 14, 38), (146, 86, 214), (98, 44, 164), (60, 22, 112), (206, 172, 248), (34, 88, 52), (86, 156, 92)),
+    "lime": ((18, 38, 14), (164, 218, 86), (112, 178, 48), (62, 122, 30), (222, 246, 172), (26, 84, 58), (60, 132, 88)),
+    "lemon": ((58, 42, 8), (255, 232, 112), (240, 196, 40), (196, 142, 18), (255, 248, 204), (44, 112, 52), (92, 168, 88)),
+    "tangerine": ((56, 22, 6), (255, 168, 76), (238, 120, 30), (184, 76, 14), (255, 214, 164), (44, 112, 52), (92, 168, 88)),
+    "kiwi": ((36, 26, 12), (176, 138, 86), (128, 94, 52), (88, 62, 32), (214, 190, 142), (70, 138, 46), (130, 192, 76)),
     "lie": ((38, 12, 24), (232, 92, 150), (176, 40, 98), (112, 18, 60), (252, 182, 210), (60, 20, 34), (120, 40, 60)),
     "dead": ((40, 40, 48), (150, 152, 166), (112, 114, 130), (80, 82, 96), (190, 192, 204), (90, 92, 100), (130, 132, 140)),
 }
+FRUITS = ("grape", "lime", "lemon", "tangerine", "kiwi")  # topic bosses; "lie" is the dragonfruit liar
+
+
+def fruit_for(topic: str) -> str:
+    """The same topic always gets the same fruit boss."""
+    return FRUITS[sum(topic.lower().encode()) % len(FRUITS)]
 RED_EYE, GLINT, MOUTH, FANG, SWEAT, BANDAGE = (255, 64, 64), (255, 220, 96), (70, 8, 26), (252, 248, 236), (120, 200, 250), (246, 226, 196)
 DARK_RED, BONE = (190, 30, 40), (236, 228, 208)
 
@@ -91,7 +102,8 @@ DARK_RED, BONE = (190, 30, 40), (236, 228, 208)
 def evil(mood: str = "angry", kind: str = "boss") -> tuple[int, int, Px]:
     """The mascot's evil twin, recoloured, with an angry face, red eyes and fangs."""
     w, h, base = mascot()
-    out, light, main, shadow, shine, leaf, leaf_hi = PALETTES["dead" if mood == "dead" else kind]
+    out, light, main, shadow, shine, leaf, leaf_hi = PALETTES["dead" if mood == "dead" else
+                                                              "grape" if kind == "boss" else kind]
     swap = {OUT: out, LIGHT: light, MAIN: main, SHADOW: shadow, WHITE: shine, LEAF: leaf}
     px: Px = {}
     for (x, y), c in base.items():

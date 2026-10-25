@@ -152,8 +152,8 @@ class Canvas:
 def battle(game, name: str, stamp: str = "", stamp_color=GOLD) -> bytes:
     """The boss with both HP bars. `stamp` is a hit marker for reveals, e.g. "CRIT!" or "-34 HP"."""
     c = Canvas(960, 380)
-    kind = "lie" if game.mode == "lie" else "boss"
-    color = (232, 92, 150) if kind == "lie" else (146, 86, 214)
+    kind = "lie" if game.mode == "lie" else sprites.fruit_for(game.topic)
+    color = sprites.PALETTES[kind][1]
     mood = "dead" if game.hp <= 0 else "hurt" if game.hp < 40 else "angry"
     c.glow(200, 190, 210, color if mood != "dead" else (90, 90, 110))
     art = sprites.boss_image(mood, kind, 264)
@@ -206,7 +206,8 @@ def results(game, name: str, board: list[tuple[str, str, int]], weak: list[str])
         c.text(x, top + 78, "points", font(PIX, 17), MUTED, "ma")
     hero = sprites.image(sprites.hero(), 6)  # your squad's berry, sword up
     c.sprite(hero, 24, base - hero.height)
-    boss = sprites.boss_image("dead" if game.outcome == "victory" else "angry", "lie" if game.mode == "lie" else "boss", 150)
+    kind = "lie" if game.mode == "lie" else sprites.fruit_for(game.topic)
+    boss = sprites.boss_image("dead" if game.outcome == "victory" else "angry", kind, 150)
     c.sprite(boss, 960 - 30 - boss.width, base - boss.height)
     c.rect(24, base, 912, 3, TRACK)
     c.text(480, base + 30, f"Weak spot: {clean(', '.join(weak), 50)}" if weak else "No weak spots this round",
