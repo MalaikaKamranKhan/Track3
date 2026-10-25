@@ -1,11 +1,10 @@
-"""Every message the bot sends is a Card. Discord renders it as a colored embed, Telegram as bold HTML text.
+"""Every message the bot sends is a Card. Discord renders it as a colored embed.
 
 Card text uses a small Markdown subset: **bold**, *italic*, `code`, ~~strike~~. Wrap anything that came from a user
 or the AI in esc() so stray * or _ show up as written.
 """
 from __future__ import annotations
 
-import html
 import re
 from dataclasses import dataclass, field
 
@@ -45,26 +44,6 @@ def plain(card: Card) -> str:
     parts = [card.title, card.body] + [f"{n}: {v}" for n, v, _ in card.fields] + [card.footer]
     text = "\n".join(p for p in parts if p)
     return re.sub(r"\\(.)", r"\1", text.replace("**", "").replace("~~", ""))
-
-
-def to_telegram_html(card: Card) -> str:
-    def conv(s: str) -> str:
-        s = re.sub(r"\\(.)", lambda m: f"\x00{ord(m.group(1))}\x00", s)  # escaped chars first
-        s = html.escape(s, quote=False)
-        s = re.sub(r"\*\*(.+?)\*\*", r"<b>\1</b>", s, flags=re.S)
-        s = re.sub(r"~~(.+?)~~", r"<s>\1</s>", s, flags=re.S)
-        s = re.sub(r"`(.+?)`", r"<code>\1</code>", s, flags=re.S)
-        s = re.sub(r"(?<![\w*])\*(?!\s)(.+?)(?<!\s)\*(?![\w*])", r"<i>\1</i>", s, flags=re.S)
-        return re.sub(r"\x00(\d+)\x00", lambda m: html.escape(chr(int(m.group(1))), quote=False), s)
-
-    out = [f"<b>{html.escape(card.title, quote=False)}</b>"]
-    if card.body:
-        out.append(conv(card.body))
-    for name, value, _ in card.fields:
-        out.append(f"<b>{html.escape(name, quote=False)}</b>\n{conv(value)}")
-    if card.footer:
-        out.append(f"<i>{html.escape(card.footer, quote=False)}</i>")
-    return "\n\n".join(out)[:4000]
 
 
 # shared bits ---------------------------------------------------------------------
@@ -318,7 +297,7 @@ def help_card() -> Card:
                                 "/radar · what's due this week\n/notes · upload slides or notes (PDF)", False),
                     ("🏅 Progress", "/profile · your level and badges\n/leaderboard · squad XP ranking", False),
                     ("📲 Cubbie", "/link · connect your Cubbie\n/ask_cubbie <topic> · ask linked Cubbies for a battle\n"
-                                 "/insights · what the bot knows about your courses", False),
+                                 f"/insights · what {config.BOT_NAME} knows about your courses", False),
                     ("🔒 Privacy", "/quiet · stop reading the chat · /watch · turn it back on", False)],
                 "Tip: say \"midterm thursday, im cooked\" and see what happens 👀")
 

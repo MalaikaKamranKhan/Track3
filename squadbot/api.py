@@ -104,6 +104,6 @@ def home():
 <title>{config.BOT_NAME}</title><style>body{{font-family:system-ui;max-width:640px;margin:40px auto;padding:0 16px;line-height:1.6}}
 code{{background:#eee;padding:2px 5px;border-radius:4px}}</style></head><body>
 <h1>⚔️ {config.BOT_NAME}</h1><p>The study squad bot that turns your group chat into a boss battle, and talks to your own Cubbie.</p>
-<ol><li>Add the bot to your Discord channel or Telegram group.</li><li><code>/battle caches</code> to fight a topic boss together.</li>
+<ol><li>Add {config.BOT_NAME} to your Discord server.</li><li><code>/battle caches</code> to fight a topic boss together.</li>
 <li><code>/link</code> to connect your Cubbie: it can send the squad challenges from your course material and text you your private recap.</li></ol>
 <p>Bots online: {bots}</p></body></html>"""

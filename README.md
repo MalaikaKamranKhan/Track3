@@ -1,8 +1,8 @@
-# ⚔️ Squad: your group chat's study boss battle, linked to your own Cubbie
+# ⚔️ Cramberry: your group chat's study boss battle, linked to your own Cubbie
 
 **Cubbie Hackathon · Track 3 (Group Chat Assistant) · team wildberry · DevHacks Fall 2026**
 
-Squad joins your study group on **Discord** or **Telegram**. When the chat sounds like a midterm is coming
+Cramberry (cram + cranberry) is a pixel berry warrior that joins your study group on **Discord**. When the chat sounds like a midterm is coming
 ("im so cooked on caches"), it offers a quick **boss battle**: everyone answers multiple-choice questions with
 buttons, every right answer knocks down the boss's HP, and the squad wins or loses together. Afterwards it posts a
 leaderboard and the group's weakest topic.
@@ -12,17 +12,17 @@ from *their* Canvas course material and post it to the group, and later texts th
 rank, the questions they missed with explanations, and anyone who tagged them in the group.
 
 **Why students need this:** studying alone is boring, group study turns into chatting, and nobody knows what the
-group actually doesn't understand. Squad makes the group chat itself the study session, and Cubbie keeps the
+group actually doesn't understand. Cramberry makes the group chat itself the study session, and Cubbie keeps the
 personal follow-up private.
 
 ## How it fits together
 
 ```
- Your phone (private)                         Group chat (shared)
- ┌──────────────┐  squad-link Skill  ┌──────────────┐   ┌──────────────┐
- │ Your Cubbie  │ ── HTTPS + key ──▶ │ Squad server │ ─▶│ Discord bot  │
- │ (iMessage)   │ ◀── your recap ─── │ games, AI    │ ─▶│ Telegram bot │
- └──────────────┘                    └──────────────┘   └──────────────┘
+ Your phone (private)                             Group chat (shared)
+ ┌──────────────┐  squad-link Skill  ┌──────────────────┐   ┌──────────────┐
+ │ Your Cubbie  │ ── HTTPS + key ──▶ │ Cramberry server │ ─▶│ Discord bot  │
+ │ (iMessage)   │ ◀── your recap ─── │ games, AI        │   │ your server  │
+ └──────────────┘                    └──────────────────┘   └──────────────┘
 ```
 
 - **Cubbie → group:** "challenge my squad on caches" → Cubbie writes questions from Canvas → asks you → posts.
@@ -77,17 +77,12 @@ python -m squadbot.main
 It works with no keys at all: `LLM_PROVIDER=fake` uses a built-in caches question bank, perfect for a demo.
 
 ### Discord bot token
-1. https://discord.com/developers/applications → **New Application** → name it "Squad".
+1. https://discord.com/developers/applications → **New Application** → name it "Cramberry".
 2. **Bot** tab → **Reset Token** → copy into `DISCORD_TOKEN`. On the same page turn on **Message Content Intent**.
 3. **OAuth2 → URL Generator**: scopes `bot` and `applications.commands`; permissions Send Messages,
    Read Message History, Embed Links. Open the URL and add the bot to your server.
 4. Right-click your server → Copy Server ID (turn on Developer Mode in Discord settings if missing) →
    `DISCORD_GUILD_ID`, so slash commands appear instantly.
-
-### Telegram bot token
-1. Message **@BotFather** → `/newbot` → copy the token into `TELEGRAM_TOKEN`.
-2. To let it notice study moments in normal messages: BotFather → `/setprivacy` → your bot → **Disable**.
-3. Add the bot to your group.
 
 ### AI key (pick one)
 - **Gemini** (free, 2 min): https://aistudio.google.com/apikey → `LLM_PROVIDER=gemini`, `GEMINI_API_KEY=...`
@@ -115,7 +110,7 @@ For something that stays up without your laptop, deploy to Railway or Render as 
    "how did the squad battle go?".
 
 ## Demo script for judges (3 minutes)
-1. Group chat: someone types "midterm thursday, im so cooked on caches" → Squad offers a battle.
+1. Group chat: someone types "midterm thursday, im so cooked on caches" → Cramberry offers a battle.
 2. Instead, Malaika texts her **Cubbie** "challenge my squad on caches from my CSE 230 notes" → approves →
    "📲 Malaika's Cubbie sent a challenge" lands in Discord.
 3. Hand judges the Discord link: they press A–D buttons and watch the HP bar drop and the leaderboard form.
@@ -126,17 +121,17 @@ For something that stays up without your laptop, deploy to Railway or Render as 
 ```bash
 pip install pytest && python -m pytest -q tests
 ```
-Covers the rules (crits, the boss hitting back, 50/50, wagers, levels, streaks, time parsing, Telegram HTML), every
+Covers the rules (crits, the boss hitting back, 50/50, wagers, levels, streaks, time parsing, card text), every
 game end to end with simulated button presses (boss battle, Two Truths, Explain It, Daily Duel, focus, plan,
 radar, reminders), and the full Cubbie script → API → group battle → private recap loop over real HTTP.
 
 ## Code map
 - `squadbot/engine.py` · rules: scoring, boss and squad HP, crits, 50/50, wagers, weak topics
 - `squadbot/runner.py` · every game and feature, buttons, commands, the scheduler (adapter interface)
-- `squadbot/cards.py` · every message as a Card (Discord embed / Telegram HTML)
+- `squadbot/cards.py` · every message as a Card (Discord embed)
 - `squadbot/progress.py` · XP, levels, badges, Daily Duel streaks
 - `squadbot/planner.py` · study session polls, time parsing, reminders
-- `squadbot/adapters/` · Discord and Telegram
+- `squadbot/adapters/` · the Discord bot
 - `squadbot/llm.py` · question generation and study-moment detection (Gemini, Bedrock, Claude, OpenAI, offline)
 - `squadbot/api.py` · HTTPS API the Cubbie Skill calls
 - `cubbie-skill/squad-link/` · the Cubbie Skill (SKILL.md + standard-library script)

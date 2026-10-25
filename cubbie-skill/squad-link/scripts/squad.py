@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Talks to the Squad bot server for the squad-link Cubbie Skill. Standard library only.
+"""Talks to the Cramberry bot server for the squad-link Cubbie Skill. Standard library only.
 
   SQUAD_API_KEY="$SQUAD_API_KEY" python3 scripts/squad.py me
   SQUAD_API_KEY="$SQUAD_API_KEY" python3 scripts/squad.py checkin --snapshot-file snapshot.json
@@ -35,12 +35,12 @@ def call(server, key, method, path, body=None):
         except ValueError:
             detail = ""
         if exc.code == 401:
-            fail(5, "Squad key rejected. Run /link in the group chat and save the new key as SQUAD_API_KEY.")
+            fail(5, "Cramberry key rejected. Run /link in the group chat and save the new key as SQUAD_API_KEY.")
         if exc.code in (409, 503):
-            fail(6, detail or "The squad is busy or the bot is offline.")
+            fail(6, detail or "The squad is busy or Cramberry is offline.")
         fail(2, f"Server said: {detail or exc.code}")
     except (urllib.error.URLError, TimeoutError, OSError) as exc:
-        fail(4, f"Squad server unreachable ({exc}).")
+        fail(4, f"Cramberry server unreachable ({exc}).")
 
 
 def fail(code, message):

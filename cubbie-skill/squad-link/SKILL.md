@@ -1,18 +1,18 @@
 ---
 name: squad-link
-description: Connects Cubbie to the student's Squad bot on Discord or Telegram, to share course progress, answer the squad's battle requests and text them a private recap. Use when the student wants to link their study squad, check their squad, challenge or quiz their study group or group chat, or asks how a squad battle went or what they missed in the group.
+description: Connects Cubbie to the student's Cramberry bot on Discord, to share course progress, answer the squad's battle requests and text them a private recap. Use when the student wants to link their study squad, check their squad, challenge or quiz their study group or group chat, or asks how a squad battle went or what they missed in the group.
 ---
 
 # Squad Link
 
-The Squad bot lives in a study group's Discord channel or Telegram group and runs "boss battle" quizzes there.
-This Skill is the student's private side of it. Cubbie visits the Squad bot like a mailbox:
+The Cramberry bot lives in a study group's Discord channel and runs "boss battle" quizzes there.
+This Skill is the student's private side of it. Cubbie visits the Cramberry bot like a mailbox:
 
 - Drop-off: a small course snapshot from Canvas (topics this week, what's due, what's submitted), so the bot can
   suggest a battle at the right moment, like when the whole squad has finished an assignment or has an exam soon.
 - Pick-up: battle requests from the squad, the student's battle results, and messages where someone tagged them.
 
-Cubbie never messages the group itself. Battles reach the group only through the Squad bot, and only after the
+Cubbie never messages the group itself. Battles reach the group only through the Cramberry bot, and only after the
 student says yes. The snapshot holds course codes, topic names, assignment titles, due dates and
 submitted/not-submitted only: never grades, scores, files, feedback or messages.
 
@@ -28,7 +28,7 @@ Do not use it to quiz only the student here in the thread; Cubbie can do that on
 ## Key
 
 This Skill needs the student's personal squad key, saved in Cubbie as `SQUAD_API_KEY`. The student gets it by
-typing `/link` in their group chat; the Squad bot shows the key only to them. If the key is not saved yet, tell
+typing `/link` in their group chat; the Cramberry bot shows the key only to them. If the key is not saved yet, tell
 the student to do that, then send the secure page to save `SQUAD_API_KEY`. Never ask the student to paste the key
 into the chat. Commands receive the key only when they name it, as in the commands below.
 
@@ -46,7 +46,7 @@ All commands run from this Skill's folder and use only Python's standard library
 1. If the student agreed to share, build the snapshot from the student's Canvas: for each current course, the
    topics of this week's modules or announcements (short names, at most 5), assignments, quizzes and exams due in
    the next 14 days with their due dates, and assignments the student submitted in the last 7 days. If Canvas is
-   not connected, skip the snapshot and tell the student once that connecting Canvas lets the squad bot help more.
+   not connected, skip the snapshot and tell the student once that connecting Canvas lets Cramberry help more.
    Save it as `snapshot.json` in exactly this shape (dates as YYYY-MM-DD):
 
    ```json
@@ -116,6 +116,6 @@ checkin command; text the student only about REQUEST, RESULT, MENTION, SESSION o
 | --- | --- | --- |
 | 2 | Bad snapshot, questions file or input | Fix the file to match the shape above and run again once |
 | 3 | Key missing | Tell the student to type /link in their group chat, then send the secure page for `SQUAD_API_KEY` |
-| 4 | Squad server unreachable | Say the squad bot can't be reached right now; during a scheduled check-in, stay quiet |
+| 4 | Cramberry server unreachable | Say Cramberry can't be reached right now; during a scheduled check-in, stay quiet |
 | 5 | Key rejected | Ask the student to type /link in the group again and save the new key on the secure page |
-| 6 | A battle is already running, or the bot is offline | Pass on the message in one line and offer to try again later |
+| 6 | A battle is already running, or Cramberry is offline | Pass on the message in one line and offer to try again later |

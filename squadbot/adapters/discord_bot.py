@@ -201,7 +201,7 @@ class DiscordAdapter:
         async def leaderboard(interaction: discord.Interaction):
             await run(interaction, "leaderboard")
 
-        @tree.command(name="insights", description="What the bot knows about this squad's courses")
+        @tree.command(name="insights", description=f"What {config.BOT_NAME} knows about this squad's courses")
         async def insights_cmd(interaction: discord.Interaction):
             await run(interaction, "insights")
 
@@ -242,11 +242,11 @@ class DiscordAdapter:
         async def quiet(interaction: discord.Interaction):
             await run(interaction, "quiet")
 
-        @tree.command(name="watch", description="Let the bot suggest battles when the squad is prepping")
+        @tree.command(name="watch", description=f"Let {config.BOT_NAME} suggest battles when the squad is prepping")
         async def watch(interaction: discord.Interaction):
             await run(interaction, "watch")
 
-        @tree.command(name="help", description="Everything this bot can do")
+        @tree.command(name="help", description=f"Everything {config.BOT_NAME} can do")
         async def help_cmd(interaction: discord.Interaction):
             await run(interaction, "help")
 

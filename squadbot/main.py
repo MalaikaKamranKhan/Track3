@@ -1,4 +1,4 @@
-"""Runs the API server and whichever bots have tokens, all in one process: python -m squadbot.main"""
+"""Runs the API server and the Discord bot (when DISCORD_TOKEN is set), all in one process: python -m squadbot.main"""
 from __future__ import annotations
 
 import asyncio
@@ -10,7 +10,7 @@ from . import config, runner
 from .api import app
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(name)s %(levelname)s %(message)s") 
-logging.getLogger("httpx").setLevel(logging.WARNING)  # its request log lines include the Telegram token
+logging.getLogger("httpx").setLevel(logging.WARNING)  # one log line per LLM request is just noise
 log = logging.getLogger("squad")
 
 
@@ -19,11 +19,8 @@ async def main() -> None:
     if config.DISCORD_TOKEN:
         from .adapters.discord_bot import DiscordAdapter
         bots.append(DiscordAdapter(config.DISCORD_TOKEN))
-    if config.TELEGRAM_TOKEN:
-        from .adapters.telegram_bot import TelegramAdapter
-        bots.append(TelegramAdapter(config.TELEGRAM_TOKEN))
     if not bots:
-        log.warning("No DISCORD_TOKEN or TELEGRAM_TOKEN set: running the API server only.")
+        log.warning("No DISCORD_TOKEN set: running the API server only.")
     for bot in bots:
         runner.register(bot)
     log.info("LLM provider: %s", config.LLM_PROVIDER)

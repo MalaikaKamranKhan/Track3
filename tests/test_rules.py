@@ -119,11 +119,9 @@ def test_planner_parsing_and_reminders():
     assert planner.due_reminders(squad, ts + 60)[0][1] == "start"
 
 
-def test_cards_render_safely_for_telegram():
+def test_card_text_helpers():
     card = cards.Card("T <1>", f"**bold** and {cards.esc('a*b_c <x>')}", "info", [("F", "`code`", True)], "foot")
-    html = cards.to_telegram_html(card)
-    assert "<b>T &lt;1&gt;</b>" in html and "<b>bold</b>" in html and "a*b_c &lt;x&gt;" in html
-    assert "<code>code</code>" in html and "<i>foot</i>" in html
-    assert cards.plain(card).startswith("T <1>")
+    assert cards.esc("a*b_c") == r"a\*b\_c"
+    assert cards.plain(card).startswith("T <1>") and "bold and a*b_c <x>" in cards.plain(card)
     assert cards.boss_name("CPU caches") == "The CPU Caches Boss"
     assert cards.bar(60).startswith("🟥" * 6)

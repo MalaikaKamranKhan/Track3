@@ -108,7 +108,7 @@ async def start_game(squad: Squad, topic: str, mode: str = "boss", *, questions:
                      seconds: int | None = None) -> tuple[Game | None, str]:
     """Create a game and run it in the background. Returns (game, error message)."""
     if squad.platform not in ADAPTERS:
-        return None, f"The {squad.platform} bot isn't running right now."
+        return None, f"{config.BOT_NAME} isn't running on {squad.platform} right now."
     err = busy(squad)
     if err:
         return None, err
@@ -248,7 +248,7 @@ def answer(game_id: str, qi: int, user_id, name: str, choice: int) -> str:
 
 async def start_explain(squad: Squad, topic: str, course: str, starter_id: str, starter_name: str) -> str:
     if squad.platform not in ADAPTERS:
-        return f"The {squad.platform} bot isn't running right now."
+        return f"{config.BOT_NAME} isn't running on {squad.platform} right now."
     err = busy(squad)
     if err:
         return err
@@ -291,7 +291,7 @@ async def _run_explain(squad: Squad, state: dict) -> None:
         await post(squad, Card(f"🎤 Explain It · {state['topic'][:60]}",
                                "I'll call on someone to explain a concept **in their own words**. The AI grades it "
                                "0-10 like a kind TA.\nIf they pass, it's **open floor** for half XP.",
-                               "explain", footer=f"{len(state['items'])} rounds · Telegram: reply to my message"))
+                               "explain", footer=f"{len(state['items'])} rounds"))
         await asyncio.sleep(config.INTRO_PAUSE)
         for r, item in enumerate(state["items"]):
             target = state["order"][r % len(state["order"])] if state["order"] else None

@@ -29,7 +29,7 @@ def num(name: str, default: float) -> float:
         return default
 
 
-BOT_NAME = env("BOT_NAME", "Squad")
+BOT_NAME = env("BOT_NAME", "Cramberry")
 IMAGES = env("IMAGES", "on").lower() not in {"0", "off", "false", "no"}  # picture cards (boss, podium, profile)
 PUBLIC_URL = env("PUBLIC_URL", "http://localhost:8000").rstrip("/")
 PORT = int(num("PORT", 8000))
@@ -37,7 +37,6 @@ DATA_DIR = Path(env("DATA_DIR", str(Path(__file__).resolve().parent.parent / "da
 
 DISCORD_TOKEN = env("DISCORD_TOKEN")
 DISCORD_GUILD_ID = env("DISCORD_GUILD_ID")  # optional: instant slash-command sync for one server
-TELEGRAM_TOKEN = env("TELEGRAM_TOKEN")
 
 # LLM: fake | gemini | anthropic | openai | bedrock
 LLM_PROVIDER = env("LLM_PROVIDER", "fake").lower()
