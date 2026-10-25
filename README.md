@@ -184,17 +184,10 @@ For something that stays up without your laptop, deploy to Railway or Render as 
 
 <p align="center"><img src="docs/img/kit.png" alt="Cramberry emoji (sword, heart, victory, wave, boss), the favicon head, and the 8-colour palette" width="100%"></p>
 
-Everything lives in [`squadbot/assets/`](squadbot/assets/) as pixel SVGs (one `<rect>` per run of pixels), so
-it's easy to edit and stays crisp at any whole-number size:
-
 | File | What it is |
 | --- | --- |
-| `assets/mascot.svg` | The 24 × 24 berry the battle cards are built from (hero and every fruit boss) |
-| `assets/kit/poses/cramberry-*.svg` | The six 32 × 32 poses: idle, wave, victory, hit, thinking, sleep |
-| `assets/kit/boss/topic-boss.svg` | The kit's original dark-blue topic boss |
-| `assets/kit/emoji/sword.svg`, `hp-heart.svg` | Server emoji (upload in Server Settings → Emoji) |
-| `assets/kit/favicon/favicon.svg` | 16 × 16 head for the web page |
-| `assets/fonts/` | Pixelify Sans (labels) and Outfit (text) used on the cards, both OFL |
+| `squadbot/assets/mascot.svg` | The 24 × 24 pixel berry (one `<rect>` per pixel run) the cards are built from: Cramberry and every fruit boss |
+| `squadbot/assets/fonts/` | Pixelify Sans (labels) and Outfit (text) used on the cards, both OFL |
 | `docs/img/avatar.png` | 1024 px Discord avatar: the idle pose on cream, centred so it survives the circle crop |
 
 **Palette:** ink `#2b211b`, blue deep `#1b4fa8`, blue `#1f6fe0`, blue mid `#3a8cef`, blush `#f3a6b8`,
@@ -202,11 +195,6 @@ white `#ffffff`, gold `#fde39a`, wildberry `#b8326e`. Backgrounds: cream `#f6f0e
 The fruit boss palettes are in [`squadbot/sprites.py`](squadbot/sprites.py) (`PALETTES`).
 
 **Your own boss:** drop a `boss.png` (or a pixel `boss.svg`) into `squadbot/assets/` and the cards use it instead.
-
-All the pictures in this README are rendered from the real code. After changing a sprite or a card, rebuild them:
-```bash
-python docs/make_images.py
-```
 
 ## Tests
 ```bash
@@ -229,7 +217,7 @@ private recap loop over real HTTP.
 - `squadbot/llm.py` · question generation and study-moment detection (Gemini, Bedrock, Claude, OpenAI, offline)
 - `squadbot/api.py` · HTTPS API the Cubbie Skill calls
 - `cubbie-skill/squad-link/` · the Cubbie Skill (SKILL.md + standard-library script)
-- `docs/make_images.py` · renders the README pictures in `docs/img/`
+- `docs/img/` · the pictures in this README
 
-<p align="center"><img src="squadbot/assets/kit/poses/cramberry-wave.svg" alt="Cramberry waving" width="64"><br>
+<p align="center"><img src="docs/img/avatar.png" alt="Cramberry" width="64"><br>
 <sub>Cramberry · team wildberry · DevHacks Fall 2026</sub></p>
