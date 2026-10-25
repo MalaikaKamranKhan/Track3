@@ -28,22 +28,32 @@ async def main() -> None:
         runner.register(bot)
     log.info("LLM provider: %s", config.LLM_PROVIDER)
 
-    server = uvicorn.Server(uvicorn.Config(app, host="0.0.0.0", port=config.PORT, log_level="info"))
+    # Don't wait forever for open connections on Ctrl+C: tunnels like ngrok keep them alive.
+    server = uvicorn.Server(uvicorn.Config(app, host="0.0.0.0", port=config.PORT, log_level="info",
+                                           timeout_graceful_shutdown=2))
     tasks = [asyncio.create_task(server.serve(), name="api")]
     tasks += [asyncio.create_task(bot.start(), name=bot.platform) for bot in bots]
     tasks.append(asyncio.create_task(runner.scheduler(), name="scheduler"))
     try:
-        done, _ = await asyncio.wait(tasks, return_when=asyncio.FIRST_EXCEPTION)
+        # Stop everything as soon as any part stops (Ctrl+C ends the API server normally, without an exception).
+        done, _ = await asyncio.wait(tasks, return_when=asyncio.FIRST_COMPLETED)
         for task in done:
-            if task.exception():
+            if not task.cancelled() and task.exception():
                 raise task.exception()
     finally:
+        log.info("Shutting down...")
         for bot in bots:
             try:
-                await bot.stop()
+                await asyncio.wait_for(bot.stop(), timeout=5)
             except Exception:  # noqa: BLE001
                 pass
+        for task in tasks:
+            task.cancel()
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    try:
+        asyncio.run(main())
+    except KeyboardInterrupt:
+        pass
+    log.info("Stopped.")
