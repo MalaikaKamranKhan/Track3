@@ -9,7 +9,7 @@ import uvicorn
 from . import config, runner
 from .api import app
 
-logging.basicConfig(level=logging.INFO, format="%(asctime)s %(name)s %(levelname)s %(message)s")
+logging.basicConfig(level=logging.INFO, format="%(asctime)s %(name)s %(levelname)s %(message)s") logging.getLogger("httpx").setLevel(logging.WARNING)  # its request log lines include the Telegram token
 log = logging.getLogger("squad")
 
 
