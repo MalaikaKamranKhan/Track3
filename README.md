@@ -1,223 +1,220 @@
-<p align="center">
-  <img src="docs/img/banner.png" alt="Cramberry, a blue pixel berry knight with a sword, facing a green lime topic boss" width="100%">
-</p>
+<div align="center">
 
-<p align="center">
-  <b>Cubbie Hackathon · Track 3 (Group Chat Assistant) · team wildberry · DevHacks Fall 2026</b><br>
-  <i>Cramberry, party leader. Your study squad, in your server.</i>
-</p>
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/img/wordmark-badge.png">
+  <img src="docs/img/wordmark-light.png" width="520" alt="Cramberry: the blue pixel berry next to the word Cramberry in pixel letters">
+</picture>
+
+### Your study squad's boss battle, right in Discord.
+
+A pixel berry knight that turns a study group's Discord into a quiz game, and talks to each student's own Cubbie.
+
+![Cubbie Hackathon](https://img.shields.io/badge/cubbie%20hackathon-track%203-1f6fe0?style=for-the-badge)
+![Discord](https://img.shields.io/badge/lives%20in-discord-5865f2?style=for-the-badge)
+![Cubbie](https://img.shields.io/badge/links%20to-your%20cubbie-3a8cef?style=for-the-badge)
+![Python](https://img.shields.io/badge/python-3.10%2B-2b211b?style=for-the-badge)
+
+<img src="docs/img/banner.png" width="860" alt="Cramberry, a blue pixel berry knight with a sword, facing a green lime topic boss">
+
+<sub>Team wildberry · Cubbie Hackathon, Track 3 (Group Chat Assistant) · DevHacks Fall 2026</sub>
+
+</div>
 
 ---
 
-**Cramberry** (cram + cranberry) is a pixel berry warrior that joins your study group on **Discord**. When the chat
-sounds like a midterm is coming ("im so cooked on caches"), it rallies the squad into a quick **boss battle**: everyone
-answers multiple-choice questions with buttons, every right answer knocks down the boss's HP, and the squad wins or
-loses together. Afterwards it posts a podium and the group's weakest topic.
+## Why it exists
 
-The twist: each student can **link their own Cubbie** (the AI in their iMessage). Their Cubbie can build a battle
-from *their* Canvas course material and post it to the group, and later texts them a **private recap**: their
-rank, the questions they missed with explanations, and anyone who tagged them in the group.
+Studying alone is boring, group study turns into chatting, and nobody knows what the group *actually* doesn't
+understand.
 
-**Why students need this:** studying alone is boring, group study turns into chatting, and nobody knows what the
-group actually doesn't understand. Cramberry makes the group chat itself the study session, and Cubbie keeps the
-personal follow-up private.
+Cramberry makes the group chat itself the study session. Someone says *"im so cooked on caches"*, and two minutes
+later the whole squad is fighting the Caches Boss together. Every right answer drains its HP; every wrong one lets it
+hit back. When the fight ends, the squad sees its weakest topic, and each student's **Cubbie** quietly texts them
+what *they* missed.
 
-## 🫐 Meet the party
+---
 
-<p align="center"><img src="docs/img/berry.png" alt="The original blue berry avatar on gold, Cramberry holding a sword, and its purple evil twin" width="100%"></p>
+## How Cubbie is in the loop
 
-It all starts with one 24 × 24 blue berry (our original Discord avatar, [`squadbot/assets/mascot.svg`](squadbot/assets/mascot.svg)).
-Give it a sword and it's **Cramberry**, standing next to the podium after every battle. Recolour it, add horns,
-red eyes and fangs, and it's **the evil twin** behind every topic boss.
-
-<p align="center"><img src="docs/img/poses.png" alt="Cramberry's six poses: idle, wave, victory, hit, thinking, sleep" width="100%"></p>
-
-Cramberry is a speech-bubble knight with a wildberry crest plume, and Cubbie's cousin. It shows up small and crisp:
-32 × 32 pixels, 8 colours, an ink outline, dot eyes and blush cheeks. Pixel art built from data, not drawn by hand.
-
-| Pose | When you see it |
-| --- | --- |
-| **Idle** | The default and the Discord avatar. Sword up, cocky brow. |
-| **Wave** | Hello, and after `/link` succeeds. |
-| **Victory** | Boss defeated. Sword raised. |
-| **Hit** | The boss hit back. Squint and sweat. |
-| **Thinking** | Waiting for the squad's answers. |
-| **Sleep** | `/quiet` mode. Not reading the chat. |
-
-## 🍋 The topic bosses
-
-<p align="center"><img src="docs/img/bosses.png" alt="Fruit topic bosses: grape, lime, lemon, tangerine, kiwi, the dragonfruit liar, and a grey defeated boss" width="100%"></p>
-
-Every boss is Cramberry's evil twin: the same berry, recoloured as a fruit, with horns, glowing red eyes and fangs.
-**Each topic gets its own fruit**, and the same topic always gets the same one (caches is grape, recursion is lime,
-TCP is lemon, floating point is tangerine, sorting is kiwi). Two Truths & a Lie is fought against the **dragonfruit
-liar**. Below 40% HP a boss squeezes one eye shut and gets a bandage; at 0% it turns grey with X eyes.
-
-## ⚔️ What the squad sees in Discord
+<div align="center"><img src="docs/img/flow.png" width="860" alt="How the squad is linked: each student's Cubbie reads their Canvas in private, sends a snapshot or a battle to the Cramberry server over the squad-link skill, Cramberry posts the game in the Discord group chat, the squad answers, and each private recap goes back only to that student's Cubbie"></div>
 
 | | |
-| --- | --- |
-| <img src="docs/img/card-battle.png" alt="Boss battle card: the lime Recursion Boss at full HP with a MISS stamp"> | <img src="docs/img/card-hurt.png" alt="Battle card: the lemon TCP boss at 30% HP, hurt, with a CRIT stamp"> |
-| **Battle:** the boss and both HP bars after every question. | **Crit!** Three right in a row hits hard. The boss is hurt. |
-| <img src="docs/img/card-liar.png" alt="Two Truths and a Lie card with the pink dragonfruit liar"> | <img src="docs/img/card-defeated.png" alt="Battle card: the kiwi Sorting Boss, grey and defeated"> |
-| **Two Truths & a Lie:** the dragonfruit liar. | **Defeated:** the boss goes grey. |
-| <img src="docs/img/card-victory.png" alt="Results card: VICTORY with a top-3 podium, Cramberry holding a sword and the beaten boss"> | <img src="docs/img/card-wiped.png" alt="Results card: SQUAD WIPED, the grape boss still angry"> |
-| **Victory:** podium, Cramberry's sword up, weak spot. | **Squad wiped:** the boss survives. Run it back. |
+|---|---|
+| **Cubbie reads Canvas** | Each student links their Cubbie with `/link`. On every check-in it shares a small course snapshot: course codes, this week's topics, due dates and what's submitted. Never grades or files. |
+| **Cubbie builds battles** | *"Challenge my squad on caches"* → Cubbie writes questions from that student's own course material, **asks them first**, then Cramberry posts the battle. |
+| **Cramberry spots the moment** | From everyone's snapshots it notices *"3 of you have the midterm Thursday"* or *"the squad keeps missing associativity"* and offers a battle. |
+| **Recaps stay private** | The group sees questions, answers and scores. Your misses and @mentions go only to your own Cubbie, through your private key. |
 
-## 🆘 "im cooked"
+Cubbie can't receive messages, so it always comes to Cramberry, like checking a mailbox. Cramberry keeps only the
+last ~20 chat messages in memory (never stored), and `/quiet` turns chat reading off.
 
-Say you're cooked in the group chat ("im cooked", "we're so cooked", "cooked fr", "gonna fail", "send help") and
-Cramberry answers the whole squad with what to do next. It never guesses the topic: you type `/battle` and Discord
-asks you for one.
+---
 
-> **🆘 Alice is cooked. Squad, assemble!**
-> Nobody gets cooked alone 🫐 Here's the game plan:
-> 1️⃣ `/battle` · type the topic you're cooked on, 2-min boss battle together
-> 2️⃣ `/explain` · teach a topic back, the AI grades it
-> 3️⃣ `/plan` · pick a time to study together
-> 4️⃣ `/focus` · group Pomodoro right now
-> 5️⃣ `/radar` · everything due this week
-
-"You cooked" and "we cooked that exam" are compliments, so they don't count. It answers at most once every 5 minutes
-per chat (`PANIC_COOLDOWN_MINUTES`), stays quiet during a game, and `/quiet` turns it off.
-
-## How it fits together
-
-<p align="center"><img src="docs/img/flow.png" alt="Your phone (Cubbie, private) sends battles over the squad-link skill to the Cramberry server, which posts cards to the group chat on Discord; answers come back and your private recap goes to your Cubbie" width="100%"></p>
-
-<p align="center"><img src="docs/img/battle-flow.png" alt="One battle: someone says im cooked, the squad runs /battle, answers A-D, the boss goes down, and Cubbie texts a private recap" width="100%"></p>
-
-- **Cubbie → group:** "challenge my squad on caches" → Cubbie writes questions from Canvas → asks you → posts.
-- **Cubbie check-ins (the mailbox):** every few hours, or when you text "check my squad", your Cubbie drops off a
-  course snapshot from Canvas (topics, what's due, what you submitted) and picks up squad requests, your results
-  and @mentions. Cubbie can't receive pushes, so it always comes to the bot.
-- **Right-moment suggestions:** from everyone's snapshots the bot notices "all 4 of you submitted PSET 4",
-  "3 of you have the midterm tomorrow" or "the squad keeps missing associativity" and offers a battle, with
-  buttons to start one now or ask your Cubbies to build one from Canvas.
-- **What's shared:** the group sees questions, answers and scores. Your misses and mentions go only to your own
-  Cubbie, through your private key. The bot keeps the last ~20 chat messages in memory only (never stored) and
-  `/quiet` turns chat reading off.
-- **When it asks:** Cubbie asks before posting anything to the group; the bot asks the group before starting a battle.
-
-## Games
+## The games
 
 | Game | How it plays |
-| --- | --- |
-| ⚔️ **Boss Battle** `/battle <topic>` | Everyone answers A-D. Right answers damage the boss, wrong ones let it hit the squad back. 3 in a row = ⚡ critical hit. One 🎲 50/50 per battle. 💰 Final strike: wager half or ALL IN. |
-| 🕵️ **Two Truths & a Lie** `/lie <topic>` | Three statements, one is a plausible misconception. Find the lie. |
-| 🎤 **Explain It** `/explain <topic>` | The bot calls on someone to explain a concept in their own words; the AI grades it 0-10 with what they covered and what to add. Pass and it's open floor for half XP. |
-| 📅 **Daily Duel** `/daily` | One question a day. Keep your 🔥 streak and the squad streak alive. `/daily 8pm` schedules it, `/daily off` stops it. |
+|---|---|
+| **Boss Battle** `/battle <topic>` | Everyone answers A–D. Right answers damage the boss; wrong ones let it hit the squad back. 3 in a row is a ⚡ critical hit, there's one 🎲 50/50 per battle, and the final strike lets you 💰 wager half or all in. |
+| **Two Truths & a Lie** `/lie <topic>` | Three statements, one is a plausible misconception. Find the lie before the dragonfruit liar wins. |
+| **Explain It** `/explain <topic>` | Cramberry calls on someone to explain a concept in their own words. The AI grades it 0–10 and says what to add. Pass, and it's open floor for half XP. |
+| **Daily Duel** `/daily` | One question a day to keep your streak and the squad streak alive. `/daily 8pm` schedules it, `/daily off` stops it. |
 
-Every game gives XP: levels go 🐣 Freshman → 👑 Professor, and badges (🗡️ Boss Slayer, 🎯 Perfect Round, 🔥 On Fire,
-🕵️ Lie Detector, 🧠 Big Brain, 💰 High Roller, 📅 Habit Builder, 🍅 Deep Work) show on `/profile`.
+Every game gives XP. Levels run from **Freshman** to **Professor**, and badges like Boss Slayer, Perfect Round and
+High Roller show on `/profile`.
+
+---
+
+## What the squad sees
+
+Every battle posts a picture card after each question, drawn live by the bot. Each topic gets its own fruit boss,
+and the same topic always gets the same one (caches is grape, recursion is lime, TCP is lemon).
+
+| | |
+|---|---|
+| <img src="docs/img/card-battle.png" alt="Boss battle card: the lime Recursion Boss at full HP with a MISS stamp"> | <img src="docs/img/card-hurt.png" alt="Battle card: the lemon TCP boss at 30% HP, hurt, with a CRIT stamp"> |
+| **The battle.** The boss and both HP bars. | **Crit!** Three right in a row. Below 40% the boss is hurt. |
+| <img src="docs/img/card-liar.png" alt="Two Truths and a Lie card with the pink dragonfruit liar"> | <img src="docs/img/card-defeated.png" alt="Battle card: the kiwi Sorting Boss, grey and defeated"> |
+| **Two Truths & a Lie.** The dragonfruit liar. | **Defeated.** The boss goes grey. |
+| <img src="docs/img/card-victory.png" alt="Results card: VICTORY with a top-3 podium, Cramberry holding a sword and the beaten boss"> | <img src="docs/img/card-wiped.png" alt="Results card: SQUAD WIPED, the grape boss still angry"> |
+| **Victory.** The podium and the squad's weak spot. | **Squad wiped.** Run it back. |
+
+<div align="center">
+<img src="docs/img/berry.png" width="49%" alt="The original blue berry, Cramberry holding a sword, and its purple evil twin">
+<img src="docs/img/bosses.png" width="49%" alt="Fruit topic bosses: grape, lime, lemon, tangerine, kiwi, the dragonfruit liar, and a defeated boss">
+</div>
+
+<sub>Every character is one 24 × 24 pixel berry ([`squadbot/assets/mascot.svg`](squadbot/assets/mascot.svg)): give it a sword and it's Cramberry, recolour it with horns and fangs and it's a topic boss.</sub>
+
+---
+
+## "im cooked"
+
+Say you're cooked in the group chat (*"im cooked"*, *"gonna fail"*, *"send help"*) and Cramberry rallies the whole
+squad instead of letting you spiral:
+
+> **Sunny is cooked. Squad, assemble!** Here's the game plan:
+> `/battle` a 2-minute boss battle · `/explain` teach it back · `/plan` pick a study time · `/focus` group Pomodoro · `/radar` what's due
+
+It never guesses your topic, stays quiet during games, answers at most once every 5 minutes, and *"we cooked that
+exam"* doesn't count.
+
+---
 
 ## Study tools
 
 | Command | What it does |
-| --- | --- |
-| `/plan <topic>` | Poll for a study session time (next 3 evenings, or `times: tue 7pm, wed 6pm`). Tap times, the starter locks it, everyone going gets pinged 30 min before and at the start, and linked Cubbies offer to add it to Google Calendar. |
-| `/focus [minutes]` | Group Pomodoro. Join, focus, get pinged at the break, +20 XP. |
-| `/radar` | What's due in the next 7 days across the squad (from linked Cubbies). Also posts every morning at 9. |
-| `/notes` | Upload slides or notes (PDF, txt, md); battles on those topics use them. |
+|---|---|
+| `/plan <topic>` | A poll for a study time. The starter locks it, everyone going gets pinged 30 min before, and linked Cubbies offer to add it to Google Calendar. |
+| `/focus [minutes]` | Group Pomodoro. Join, focus, get pinged at the break. |
+| `/radar` | Everything due in the next 7 days across the squad (from linked Cubbies). Also posts every morning at 9. |
+| `/notes` | Upload slides or notes (PDF, txt, md), and battles on those topics use them. |
 | `/insights` | What Cramberry knows: courses, this week's topics, deadlines, weak spots. |
-| `/profile`, `/leaderboard` | Levels, XP, badges, streaks, accuracy. |
-| `/link`, `/ask_cubbie <topic>` | Connect your Cubbie; ask every linked Cubbie to build a battle from Canvas. |
-| `/quiet`, `/watch` | Stop or allow reading the chat for study moments. |
+| `/profile` · `/leaderboard` | Level, XP, badges, streaks, accuracy. |
+| `/link` · `/ask_cubbie <topic>` | Connect your Cubbie, or ask every linked Cubbie to build a battle from Canvas. |
+| `/quiet` · `/watch` | Stop or allow reading the chat. |
 
-**Course-aware:** when a linked Cubbie has shared your courses, `/battle CSE230` becomes your CSE 230 (course name and
-this week's topics go to the AI), not another university's course with the same code.
+**Course-aware:** once a Cubbie has shared your courses, `/battle CSE230` means *your* CSE 230, not another
+university's course with the same code.
 
-## Run it (15 minutes)
+---
 
-```bash
-python3 -m venv .venv && source .venv/bin/activate      # Python 3.10+
-pip install -r requirements.txt
-cp .env.example .env                                      # then fill it in (below)
-python -m squadbot.main
+## Run it
+
+You need Python 3.10+, a Discord server you can add bots to, and optionally an AI key. With no key at all,
+`LLM_PROVIDER=fake` runs on a built-in question bank.
+
+**1. Install**
+
+```powershell
+python -m venv .venv
+.venv\Scripts\python -m pip install -r requirements.txt
+copy .env.example .env
+```
+<sub>macOS/Linux: `python3 -m venv .venv`, `.venv/bin/python -m pip install -r requirements.txt`, `cp .env.example .env`.</sub>
+
+**2. Create the Discord bot**
+
+1. [discord.com/developers/applications](https://discord.com/developers/applications) → **New Application** → "Cramberry". Upload [`docs/img/avatar.png`](docs/img/avatar.png) as the icon.
+2. **Bot** tab → **Reset Token** → paste it into `DISCORD_TOKEN`. On the same page turn on **Message Content Intent**.
+3. **OAuth2 → URL Generator** → scopes `bot` and `applications.commands`, permissions Send Messages, Read Message History, Embed Links, Attach Files. Open the link and add the bot to your server.
+4. Right-click your server → **Copy Server ID** → `DISCORD_GUILD_ID`, so slash commands appear instantly.
+
+**3. Pick an AI** (in `.env`)
+
+| Provider | Setting |
+|---|---|
+| Gemini (free key from [AI Studio](https://aistudio.google.com/apikey)) | `LLM_PROVIDER=gemini`, `GEMINI_API_KEY=...` |
+| Claude / OpenAI | `LLM_PROVIDER=anthropic` or `openai`, plus the matching key |
+| No key | `LLM_PROVIDER=fake` |
+
+**4. Start it**
+
+```powershell
+.venv\Scripts\python -m squadbot.main
 ```
 
-It works with no keys at all: `LLM_PROVIDER=fake` uses a built-in caches question bank, perfect for a demo.
+One process runs the Discord bot, the scheduler and the API for Cubbie. Run **one copy per bot token**; two copies
+answer everything twice.
 
-### Discord bot token
-1. https://discord.com/developers/applications → **New Application** → name it "Cramberry" and upload
-   [`docs/img/avatar.png`](docs/img/avatar.png) as the app icon (and again on the **Bot** tab).
-2. **Bot** tab → **Reset Token** → copy into `DISCORD_TOKEN`. On the same page turn on **Message Content Intent**.
-3. **OAuth2 → URL Generator**: scopes `bot` and `applications.commands`; permissions Send Messages,
-   Read Message History, Embed Links. Open the URL and add the bot to your server.
-4. Right-click your server → Copy Server ID (turn on Developer Mode in Discord settings if missing) →
-   `DISCORD_GUILD_ID`, so slash commands appear instantly.
+**5. Give it an HTTPS address** (only needed for Cubbie)
 
-### AI key (pick one)
-- **Gemini** (free, 2 min): https://aistudio.google.com/apikey → `LLM_PROVIDER=gemini`, `GEMINI_API_KEY=...`
-- **AWS Bedrock** (sponsor credits): `pip install boto3`, enable model access in the Bedrock console,
-  set `LLM_PROVIDER=bedrock` plus AWS credentials; default model is Amazon Nova Lite.
-- **Claude** or **OpenAI**: `LLM_PROVIDER=anthropic` / `openai` with the matching key.
-- `LLM_MODEL` overrides the default model name if a provider rejects it.
-
-### Make it reachable over HTTPS (needed for Cubbie)
-Fastest for tonight, from the laptop running the bot:
-```bash
-cloudflared tunnel --url http://localhost:8000     # prints https://<random>.trycloudflare.com
+```powershell
+ngrok http --url=<your-free-static-domain> 8000        # or: cloudflared tunnel --url http://localhost:8000
 ```
-Put that URL in `PUBLIC_URL` (restart the bot) and in `SERVER` at the top of `cubbie-skill/squad-link/scripts/squad.py`.
-For something that stays up without your laptop, deploy to Railway or Render as a web service with start command
-`python -m squadbot.main` and the same environment variables (free tiers may sleep when idle).
+
+Put that `https://` address in `PUBLIC_URL` in `.env` and in `SERVER` at the top of
+[`cubbie-skill/squad-link/scripts/squad.py`](cubbie-skill/squad-link/scripts/squad.py), then restart the bot.
+
+---
 
 ## Connect Cubbie
 
-1. Push `cubbie-skill/squad-link/` to a **public** GitHub repo (with `SERVER` set to your https URL).
-2. Text Cubbie the folder link, e.g. `https://github.com/<you>/<repo>/tree/main/cubbie-skill/squad-link`, reply yes.
-3. In the group chat type `/link`, copy your key.
-4. Text Cubbie "link my study squad". Paste the key on Cubbie's **secure page** (never in the chat).
-5. Try: "challenge my squad on caches" → say yes → the battle appears in the group. Play it, then text Cubbie
-   "how did the squad battle go?".
+1. Push the repo with `SERVER` set, and text Cubbie the skill folder link (`…/tree/main/cubbie-skill/squad-link`). Reply yes to install.
+2. In your Discord channel, type `/link`. Your key is shown only to you.
+3. Text Cubbie *"link my study squad"* and paste the key on Cubbie's **secure page**, never in the chat.
+4. Try *"challenge my squad on caches"* → say yes → the battle appears in Discord. Afterwards: *"how did the squad battle go?"*
 
-## Demo script for judges (3 minutes)
-1. Group chat: someone types "midterm thursday, im so cooked on caches" → Cramberry rallies the squad.
-2. Instead, Malaika texts her **Cubbie** "challenge my squad on caches from my CSE 230 notes" → approves →
-   "📲 Malaika's Cubbie sent a challenge" lands in Discord.
-3. Hand judges the Discord link: they press A–D buttons and watch the grape boss's HP bar drop and the podium form.
-4. Malaika texts Cubbie "how did we do?" → private recap with her missed question explained.
+---
+
+## Demo in 3 minutes
+
+1. Someone types *"midterm thursday, im so cooked on caches"* and Cramberry rallies the squad.
+2. Malaika texts her **Cubbie** *"challenge my squad on caches from my CSE 230 notes"*, approves it, and *"📲 Malaika's Cubbie built this"* lands in Discord.
+3. Judges press A–D on their own phones and watch the grape boss's HP drop and the podium form.
+4. Malaika texts Cubbie *"how did we do?"* and gets a private recap with her missed question explained.
 5. Show `/quiet` and the "asks before posting" step: privacy and consent built in.
 
-## 🎨 Brand kit
+---
 
-<p align="center"><img src="docs/img/kit.png" alt="Cramberry emoji (sword, heart, victory, wave, boss), the favicon head, and the 8-colour palette" width="100%"></p>
+## Under the hood
 
-| File | What it is |
-| --- | --- |
-| `squadbot/assets/mascot.svg` | The 24 × 24 pixel berry (one `<rect>` per pixel run) the cards are built from: Cramberry and every fruit boss |
-| `squadbot/assets/fonts/` | Pixelify Sans (labels) and Outfit (text) used on the cards, both OFL |
-| `docs/img/avatar.png` | 1024 px Discord avatar: the idle pose on cream, centred so it survives the circle crop |
-
-**Palette:** ink `#2b211b`, blue deep `#1b4fa8`, blue `#1f6fe0`, blue mid `#3a8cef`, blush `#f3a6b8`,
-white `#ffffff`, gold `#fde39a`, wildberry `#b8326e`. Backgrounds: cream `#f6f0e4` and ink black `#0f1015`.
-The fruit boss palettes are in [`squadbot/sprites.py`](squadbot/sprites.py) (`PALETTES`).
-
-**Your own boss:** drop a `boss.png` (or a pixel `boss.svg`) into `squadbot/assets/` and the cards use it instead.
-
-## Tests
-```bash
-pip install pytest && python -m pytest -q tests
+```text
+squadbot/main.py                 one process: Discord bot + scheduler + FastAPI for Cubbie
+squadbot/runner.py               every game and feature, buttons, commands, the scheduler
+squadbot/engine.py               battle rules: damage, crits, 50/50, wagers, weak topics, "im cooked"
+squadbot/cards.py · images.py    every message as an embed, plus the Pillow picture cards
+squadbot/sprites.py              Cramberry and the fruit bosses, built from assets/mascot.svg
+squadbot/llm.py                  questions, lies, grading (Gemini, Claude, OpenAI, Bedrock, offline)
+squadbot/insights.py             Cubbie snapshots, right-moment suggestions, /radar
+squadbot/api.py                  the HTTPS API the Cubbie skill calls
+squadbot/adapters/discord_bot.py slash commands, buttons, embeds
+cubbie-skill/squad-link/         the Cubbie Skill: SKILL.md + a standard-library script
 ```
-Covers the rules (crits, the boss hitting back, 50/50, wagers, levels, streaks, time parsing, card text, "im cooked"
-phrases), every game end to end with simulated button presses (boss battle, Two Truths, Explain It, Daily Duel,
-focus, plan, radar, reminders), the picture cards and sprites, and the full Cubbie script → API → group battle →
-private recap loop over real HTTP.
 
-## Code map
-- `squadbot/engine.py` · rules: scoring, boss and squad HP, crits, 50/50, wagers, weak topics, study-moment and "im cooked" detection
-- `squadbot/runner.py` · every game and feature, buttons, commands, the scheduler (adapter interface)
-- `squadbot/cards.py` · every message as a Card (Discord embed)
-- `squadbot/images.py` · the picture cards: battle, results podium, profile
-- `squadbot/sprites.py` · Cramberry and the fruit bosses, built from `assets/mascot.svg`
-- `squadbot/progress.py` · XP, levels, badges, Daily Duel streaks
-- `squadbot/planner.py` · study session polls, time parsing, reminders
-- `squadbot/adapters/` · the Discord bot
-- `squadbot/llm.py` · question generation and study-moment detection (Gemini, Bedrock, Claude, OpenAI, offline)
-- `squadbot/api.py` · HTTPS API the Cubbie Skill calls
-- `cubbie-skill/squad-link/` · the Cubbie Skill (SKILL.md + standard-library script)
-- `docs/img/` · the pictures in this README
+```powershell
+.venv\Scripts\python -m pip install pytest
+.venv\Scripts\python -m pytest -q tests          # 27 tests, fully offline
+```
 
-<p align="center"><img src="docs/img/avatar.png" alt="Cramberry" width="64"><br>
-<sub>Cramberry · team wildberry · DevHacks Fall 2026</sub></p>
+The tests cover the battle rules, every game end to end with simulated button presses, the picture cards, and the
+full Cubbie script → API → group battle → private recap loop over real HTTP.
+
+<div align="center">
+
+---
+
+<img src="docs/img/wordmark-badge.png" width="240" alt="Cramberry">
+
+*Nobody gets cooked alone.*
+
+</div>
