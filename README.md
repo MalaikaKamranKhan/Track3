@@ -106,7 +106,7 @@ Every battle posts a picture card after each question, drawn live by the bot.
 Say you're cooked in the group chat (*"im cooked"*, *"gonna fail"*, *"send help"*) and Cramberry rallies the whole
 squad instead of letting you spiral.
 
-<div align="center"><img src="docs/img/sos.png" width="720" alt="Discord: Sunny says they're cooked on caches, and Cramberry replies with a five-step game plan: battle, explain, plan, focus, radar"></div>
+<div align="center"><img src="docs/img/sos.png" width="860" alt="Discord: Sunny says they're cooked on caches, and Cramberry replies with a five-step game plan: battle, explain, plan, focus, radar"></div>
 
 It never guesses your topic, stays quiet during games, answers at most once every 5 minutes, and *"we cooked that
 exam"* doesn't count.
@@ -126,7 +126,7 @@ exam"* doesn't count.
 | `/link` · `/ask_cubbie <topic>` | Connect your Cubbie, or ask every linked Cubbie to build a battle from Canvas. |
 | `/quiet` · `/watch` | Stop or allow reading the chat. |
 
-<div align="center"><img src="docs/img/card-profile.png" width="720" alt="Profile card for Dhanush: level 3 Junior, an XP bar, and tiles for games, accuracy, streak, badges and total XP"></div>
+<div align="center"><img src="docs/img/card-profile.png" width="860" alt="Profile card for Dhanush: level 3 Junior, an XP bar, and tiles for games, accuracy, streak, badges and total XP"></div>
 
 Every game gives XP. Levels run from **Freshman** to **Professor**, and badges like Boss Slayer, Perfect Round and
 High Roller show on `/profile`. Once a Cubbie has shared your courses, `/battle CSE230` means *your* CSE 230, not
