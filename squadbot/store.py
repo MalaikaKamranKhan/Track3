@@ -182,6 +182,9 @@ class Store:
         with self.lock:
             for link in self.links.values():  # one key per person per squad
                 if link.squad_id == squad.id and link.user_id == str(user_id):
+                    if name and link.name != name:  # keep the display name current after a rename
+                        link.name = name
+                        self.save()
                     return link
             key = "sq_" + secrets.token_urlsafe(18)
             link = Link(key=key, squad_id=squad.id, user_id=str(user_id), name=name)
