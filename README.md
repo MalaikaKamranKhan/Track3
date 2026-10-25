@@ -19,7 +19,7 @@
 
 <sub>Team wildberry · Cubbie Hackathon, Track 3 (Group Chat Assistant) · DevHacks Fall 2026</sub>
 
-**[How it works](#how-it-works)** · **[Cubbie](#cubbie-from-your-phone)** · **[Games](#the-games)** · **[Quick start](#quick-start)** · **[Setup guide](SETUP.md)**
+**[Website](https://cramberry-site.vercel.app)** · **[Demo video](https://youtu.be/d9Y_zhhDnA4)** · **[How it works](#how-it-works)** · **[Cubbie](#cubbie-from-your-phone)** · **[Games](#the-games)** · **[Quick start](#quick-start)** · **[Setup guide](SETUP.md)**
 
 </div>
 
