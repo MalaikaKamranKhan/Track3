@@ -18,7 +18,7 @@ import urllib.error
 import urllib.request
 
 # Set this to your deployed server after you deploy it (must be https).
-SERVER = "https://numeral-caboose-operation.ngrok-free.dev"
+SERVER = "https://relationship-holder-betting-boards.trycloudflare.com"
 
 
 def call(server, key, method, path, body=None):
