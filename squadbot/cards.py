@@ -253,6 +253,19 @@ def offer(topic: str, course: str) -> Card:
                 "Quick boss battle? Takes about 2 minutes.", "calm")
 
 
+def sos(name: str) -> Card:
+    """Someone said they're cooked: rally the whole squad and say which command to type (they pick the topic)."""
+    steps = ("1️⃣ `/battle` · type the topic you're cooked on, 2-min boss battle together\n"
+             "2️⃣ `/explain` · teach a topic back, the AI grades it\n"
+             "3️⃣ `/plan` · pick a time to study together\n"
+             "4️⃣ `/focus` · group Pomodoro right now\n"
+             "5️⃣ `/radar` · everything due this week")
+    return Card(f"🆘 {name} is cooked. Squad, assemble!",
+                "Nobody gets cooked alone 🫐 Here's the game plan:", "calm",
+                [("What to do next", steps, False)],
+                "Start typing / in the chat to pick a command · /quiet if you'd rather I stay out of the chat")
+
+
 def suggestion(text: str) -> Card:
     return Card("💡 Perfect time for a battle", esc(text), "calm")
 

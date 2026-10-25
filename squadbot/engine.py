@@ -245,10 +245,19 @@ def finish_game(store: Store, squad: Squad, game: Game) -> None:
 STUDY_WORDS = re.compile(
     r"\b(midterm|final|exam|quiz|test|study|studying|cram|cooked|stressed|lost|confused|due|pset|homework)\b", re.I)
 COURSE_CODE = re.compile(r"\b([A-Za-z]{2,4})\s?(\d{3})\b")
+# "im cooked", "we're so cooked", "cooked fr", "gonna fail", "send help". Not "you cooked" / "i cooked pasta".
+PANIC = re.compile(
+    r"(?<!\bi )(?<!\bhe )(?<!\bshe )(?<!\bwe )(?<!\byou )(?<!\bthey )\bcooked\b"
+    r"|\b(?:doomed|so screwed|so lost|so behind|send help|cramming|panicking|(?:gonna|going to|finna|about to) fail)\b",
+    re.I)
 
 
 def looks_like_study_moment(text: str) -> bool:
     return bool(STUDY_WORDS.search(text))
+
+
+def is_panic(text: str) -> bool:
+    return bool(PANIC.search(text))
 
 
 def course_in(text: str) -> str:

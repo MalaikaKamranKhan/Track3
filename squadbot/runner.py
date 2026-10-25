@@ -41,6 +41,7 @@ _qhandles: dict[str, Any] = {}                  # game id -> current question me
 _recent: dict[str, list[str]] = {}              # squad id -> last messages, kept in memory only
 _recent_authors: dict[str, list[str]] = {}      # squad id -> recent speakers, newest last
 _moment_checks: dict[str, float] = {}
+_panic_replies: dict[str, float] = {}           # squad id -> last "im cooked" reply
 _starting: set[str] = set()                     # squads whose game is being generated
 _explain: dict[str, dict] = {}                  # squad id -> running Explain It state
 _focus: dict[str, dict] = {}                    # squad id -> running focus session
@@ -808,6 +809,9 @@ async def on_chat_message(squad: Squad, user_id, name: str, body: str) -> None:
     buf = _recent.setdefault(squad.id, [])
     buf.append(f"{name}: {body[:300]}")
     del buf[:-20]
+    if engine.is_panic(body):
+        await _answer_panic(squad, name)
+        return
     if not engine.can_nudge(squad, config.NUDGE_COOLDOWN_MINUTES) or busy(squad):
         return
     if not engine.looks_like_study_moment(body):
@@ -824,6 +828,16 @@ async def on_chat_message(squad: Squad, user_id, name: str, body: str) -> None:
     store.save()
     await _send_offer(squad, moment["topic"], moment.get("course", ""), cards.offer(moment["topic"],
                                                                                     moment.get("course", "")))
+
+
+async def _answer_panic(squad: Squad, name: str) -> None:
+    """Someone said they're cooked: tell the whole chat which commands to use. The squad picks the topic."""
+    if busy(squad) or time.time() - _panic_replies.get(squad.id, 0) < config.PANIC_COOLDOWN_MINUTES * 60:
+        return
+    _panic_replies[squad.id] = time.time()
+    squad.last_nudge = time.time()
+    store.save()
+    await post(squad, cards.sos(name))
 
 
 async def _send_offer(squad: Squad, topic: str, course: str, card: Card) -> None:

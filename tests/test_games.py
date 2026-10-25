@@ -192,11 +192,11 @@ def test_offer_buttons_insights_profile_help_notes():
     squad = store.squad("gmisc", "c1", "misc squad")
 
     async def go():
-        await runner.on_chat_message(squad, "a", "Alice", "bro the cache midterm is thursday im cooked")
+        await runner.on_chat_message(squad, "a", "Alice", "bro the cache midterm is thursday, gotta study")
         offer = adapter.find("👀 Study moment")[0]
         assert [b.label for b in offer["buttons"]][:3] == ["⚔️ Start battle", "🕵️ Two Truths", "🎤 Explain It"]
         assert "No worries" in await press(offer["buttons"], "Not now", "a", "Alice")
-        await runner.on_chat_message(squad, "a", "Alice", "seriously cooked for the exam")
+        await runner.on_chat_message(squad, "a", "Alice", "seriously need to study for the exam")
         assert len(adapter.find("👀 Study moment")) == 1  # cooldown
         await runner.command(squad, "quiet", "a", "Alice")
         await runner.on_chat_message(squad, "a", "Alice", "exam exam exam")
@@ -223,3 +223,32 @@ def test_course_aware_topics():
     topic, course, ctx = insights.resolve(squad, "virtual memory", "cse 230")
     assert topic == "virtual memory" and ctx
     assert insights.resolve(squad, "photosynthesis", "")[2] == ""
+
+
+def test_im_cooked_rallies_the_whole_squad(monkeypatch):
+    adapter = FakeAdapter("gcooked")
+    runner.register(adapter)
+    squad = store.squad("gcooked", "c1", "cooked squad")
+
+    async def never(messages):
+        raise AssertionError("the cooked reply must not guess a topic")
+
+    async def go():
+        monkeypatch.setattr(runner.llm, "detect_moment", never)
+        await runner.on_chat_message(squad, "a", "Alice", "bro im so cooked on caches")
+        sos = adapter.find("🆘 Alice is cooked")[0]
+        steps = sos["card"].fields[0][1]
+        assert "`/battle`" in steps and "`/radar`" in steps and "caches" not in steps  # the squad types the topic
+        assert not sos["buttons"]
+        await runner.on_chat_message(squad, "b", "Bob", "cooked fr")
+        assert len(adapter.find("🆘")) == 1  # one reply per cooldown, not one per message
+        monkeypatch.setattr(runner.config, "PANIC_COOLDOWN_MINUTES", 0)
+        await runner.on_chat_message(squad, "b", "Bob", "you cooked on that pset")  # a compliment, not panic
+        assert len(adapter.find("🆘")) == 1
+        await runner.on_chat_message(squad, "b", "Bob", "we're doomed")
+        assert adapter.find("🆘 Bob is cooked")
+        await runner.command(squad, "quiet", "a", "Alice")
+        await runner.on_chat_message(squad, "a", "Alice", "im cooked")  # /quiet: stays out of the chat
+        assert len(adapter.find("🆘")) == 2
+
+    asyncio.run(go())

@@ -125,3 +125,10 @@ def test_card_text_helpers():
     assert cards.plain(card).startswith("T <1>") and "bold and a*b_c <x>" in cards.plain(card)
     assert cards.boss_name("CPU caches") == "The CPU Caches Boss"
     assert cards.bar(60).startswith("🟥" * 6)
+
+
+def test_panic_phrases():
+    for s in ("im cooked", "we're SO cooked", "cooked fr 💀", "lowkey cooked for cse 230", "gonna fail", "send help"):
+        assert engine.is_panic(s), s
+    for s in ("you cooked", "we cooked that exam", "i cooked pasta", "let him cook", "the exam is thursday"):
+        assert not engine.is_panic(s), s
